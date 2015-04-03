@@ -1,0 +1,9 @@
+CINDER_PATH = '../cinder/'
+
+env = Environment()
+
+env['APP_TARGET'] = 'MetronomeApp'
+env['APP_SOURCES'] = ['MetronomeApp.cpp']
+env['DEBUG'] = 0
+
+SConscript(CINDER_PATH + '/scons/SConscript', exports = 'env')
