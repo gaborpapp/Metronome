@@ -1,0 +1,4 @@
+[submodule "cinder"]
+	path = cinder
+	url = https://gaborpapp@bitbucket.org/gaborpapp/cinder.git
+	branch = metronome
