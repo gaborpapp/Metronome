@@ -7,11 +7,14 @@
 #include "cinder/gl/gl.h"
 #include "cinder/params/Params.h"
 
+#include "Config.h"
+#include "GlobalData.h"
+#include "OniCameraManager.h"
+#include "ParamsUtils.h"
+
 using namespace ci;
 using namespace ci::app;
 using namespace std;
-
-#include "OniCameraManager.h"
 
 class MetronomeApp : public App
 {
@@ -21,6 +24,8 @@ class MetronomeApp : public App
 	void update() override;
 
 	void keyDown( KeyEvent event ) override;
+
+	void cleanup() override;
 
  private:
 	params::InterfaceGlRef mParams;
@@ -32,15 +37,24 @@ class MetronomeApp : public App
 	Serial mSerial;
 
 	OniCameraManagerRef mOniCameraManager;
+
+	void readConfig();
+	void writeConfig();
 };
 
 void MetronomeApp::setup()
 {
+	GlobalData &gd = GlobalData::get();
+	gd.mConfig = mndl::Config::create();
+
 	setupParams();
 
 	mOniCameraManager = OniCameraManager::create();
 
 	setupSerial();
+
+	readConfig();
+	mndl::params::showAllParams( true );
 }
 
 void MetronomeApp::setupParams()
@@ -102,7 +116,7 @@ void MetronomeApp::keyDown( KeyEvent event )
 			break;
 
 		case KeyEvent::KEY_s:
-			mParams->show( ! mParams->isVisible() );
+			mndl::params::showAllParams( ! mParams->isVisible() );
 			if ( isFullScreen() )
 			{
 				if ( mParams->isVisible() )
@@ -123,6 +137,39 @@ void MetronomeApp::keyDown( KeyEvent event )
 		default:
 			break;
 	}
+}
+
+void MetronomeApp::cleanup()
+{
+	writeConfig();
+}
+
+void MetronomeApp::readConfig()
+{
+	const GlobalData &gd = GlobalData::get();
+	mndl::params::addParamsLayoutVars( gd.mConfig );
+	fs::path configPath = app::getAppPath();
+#ifdef CINDER_MAC
+	configPath = configPath.parent_path();
+#endif
+	configPath /= "config.json";
+	if ( fs::exists( configPath ) )
+	{
+		gd.mConfig->read( loadFile( configPath ) );
+		mndl::params::readParamsLayout();
+	}
+}
+
+void MetronomeApp::writeConfig()
+{
+	GlobalData &gd = GlobalData::get();
+	fs::path configPath = app::getAppPath();
+#ifdef CINDER_MAC
+	configPath = configPath.parent_path();
+#endif
+	configPath /= "config.json";
+	mndl::params::writeParamsLayout();
+	gd.mConfig->write( writeFile( configPath ) );
 }
 
 CINDER_APP( MetronomeApp, RendererGl )
