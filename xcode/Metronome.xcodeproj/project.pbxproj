@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 44;
+	objectVersion = 46;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -14,14 +14,39 @@
 		00B784B40FF439BC000DE1D7 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784B00FF439BC000DE1D7 /* AudioToolbox.framework */; };
 		00B784B50FF439BC000DE1D7 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784B10FF439BC000DE1D7 /* AudioUnit.framework */; };
 		00B784B60FF439BC000DE1D7 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784B20FF439BC000DE1D7 /* CoreAudio.framework */; };
+		1492056A1AD2ACAA00796FB3 /* libNiTE2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 149204EB1AD2ACAA00796FB3 /* libNiTE2.dylib */; };
+		1492056B1AD2ACAA00796FB3 /* libOpenNI2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 149204EC1AD2ACAA00796FB3 /* libOpenNI2.dylib */; };
+		149205BD1AD2ACAA00796FB3 /* CinderOni.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 149205661AD2ACAA00796FB3 /* CinderOni.cpp */; };
+		149205C01AD2B71500796FB3 /* libNiTE2.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 149204EB1AD2ACAA00796FB3 /* libNiTE2.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		149205C11AD2B71500796FB3 /* libOpenNI2.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 149204EC1AD2ACAA00796FB3 /* libOpenNI2.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		149205C61AD2B76C00796FB3 /* NiTE2 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 149205C21AD2B76C00796FB3 /* NiTE2 */; };
+		149205C71AD2B76C00796FB3 /* OpenNI.ini in CopyFiles */ = {isa = PBXBuildFile; fileRef = 149205C31AD2B76C00796FB3 /* OpenNI.ini */; };
+		149205C81AD2B76C00796FB3 /* OpenNI2 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 149205C41AD2B76C00796FB3 /* OpenNI2 */; };
+		149205C91AD2B76C00796FB3 /* NiTE.ini in CopyFiles */ = {isa = PBXBuildFile; fileRef = 149205C51AD2B76C00796FB3 /* NiTE.ini */; };
+		23AFFB7207C240619BD5BCC1 /* CinderApp.icns in Resources */ = {isa = PBXBuildFile; fileRef = 4B5460B8A8A048AEAAC4E31F /* CinderApp.icns */; };
 		5323E6B20EAFCA74003A9687 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B10EAFCA74003A9687 /* CoreVideo.framework */; };
 		5323E6B60EAFCA7E003A9687 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B50EAFCA7E003A9687 /* QTKit.framework */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
-		398DE303D04F4BDCB8B2F9A5 /* Metronome_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 189785A47709428D94B2D9C3 /* Metronome_Prefix.pch */; };
-		23AFFB7207C240619BD5BCC1 /* CinderApp.icns in Resources */ = {isa = PBXBuildFile; fileRef = 4B5460B8A8A048AEAAC4E31F /* CinderApp.icns */; };
-		A2A2EE1A6D1343B9BED6B0EE /* Resources.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B632CDE11C34BE0997B7A2B /* Resources.h */; };
 		AB9D4DB8A37843A9AE94E4E6 /* MetronomeApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 743FAA084C7745508F9D3858 /* MetronomeApp.cpp */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		149205BF1AD2B6ED00796FB3 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 6;
+			files = (
+				149205C61AD2B76C00796FB3 /* NiTE2 in CopyFiles */,
+				149205C71AD2B76C00796FB3 /* OpenNI.ini in CopyFiles */,
+				149205C81AD2B76C00796FB3 /* OpenNI2 in CopyFiles */,
+				149205C91AD2B76C00796FB3 /* NiTE.ini in CopyFiles */,
+				149205C01AD2B71500796FB3 /* libNiTE2.dylib in CopyFiles */,
+				149205C11AD2B71500796FB3 /* libOpenNI2.dylib in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		006D720219952D00008149E2 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
@@ -32,16 +57,52 @@
 		00B784B10FF439BC000DE1D7 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
 		00B784B20FF439BC000DE1D7 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		149204C91AD2ACAA00796FB3 /* OniPlatformAndroid-Arm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "OniPlatformAndroid-Arm.h"; sourceTree = "<group>"; };
+		149204CB1AD2ACAA00796FB3 /* OniDriverAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OniDriverAPI.h; sourceTree = "<group>"; };
+		149204CC1AD2ACAA00796FB3 /* OniDriverTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OniDriverTypes.h; sourceTree = "<group>"; };
+		149204CD1AD2ACAA00796FB3 /* KinectProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KinectProperties.h; sourceTree = "<group>"; };
+		149204CF1AD2ACAA00796FB3 /* OniPlatformLinux-Arm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "OniPlatformLinux-Arm.h"; sourceTree = "<group>"; };
+		149204D11AD2ACAA00796FB3 /* OniPlatformLinux-x86.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "OniPlatformLinux-x86.h"; sourceTree = "<group>"; };
+		149204D31AD2ACAA00796FB3 /* OniPlatformMacOSX.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OniPlatformMacOSX.h; sourceTree = "<group>"; };
+		149204D41AD2ACAA00796FB3 /* NiTE.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NiTE.h; sourceTree = "<group>"; };
+		149204D51AD2ACAA00796FB3 /* NiteCAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NiteCAPI.h; sourceTree = "<group>"; };
+		149204D61AD2ACAA00796FB3 /* NiteCEnums.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NiteCEnums.h; sourceTree = "<group>"; };
+		149204D71AD2ACAA00796FB3 /* NiteCTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NiteCTypes.h; sourceTree = "<group>"; };
+		149204D81AD2ACAA00796FB3 /* NiteEnums.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NiteEnums.h; sourceTree = "<group>"; };
+		149204D91AD2ACAA00796FB3 /* NiteVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NiteVersion.h; sourceTree = "<group>"; };
+		149204DA1AD2ACAA00796FB3 /* OniCAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OniCAPI.h; sourceTree = "<group>"; };
+		149204DB1AD2ACAA00796FB3 /* OniCEnums.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OniCEnums.h; sourceTree = "<group>"; };
+		149204DC1AD2ACAA00796FB3 /* OniCProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OniCProperties.h; sourceTree = "<group>"; };
+		149204DD1AD2ACAA00796FB3 /* OniCTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OniCTypes.h; sourceTree = "<group>"; };
+		149204DE1AD2ACAA00796FB3 /* OniEnums.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OniEnums.h; sourceTree = "<group>"; };
+		149204DF1AD2ACAA00796FB3 /* OniPlatform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OniPlatform.h; sourceTree = "<group>"; };
+		149204E01AD2ACAA00796FB3 /* OniProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OniProperties.h; sourceTree = "<group>"; };
+		149204E11AD2ACAA00796FB3 /* OniTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OniTest.h; sourceTree = "<group>"; };
+		149204E21AD2ACAA00796FB3 /* OniVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OniVersion.h; sourceTree = "<group>"; };
+		149204E31AD2ACAA00796FB3 /* OpenNI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenNI.h; sourceTree = "<group>"; };
+		149204E41AD2ACAA00796FB3 /* PrimeSense.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrimeSense.h; sourceTree = "<group>"; };
+		149204E51AD2ACAA00796FB3 /* PS1080.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PS1080.h; sourceTree = "<group>"; };
+		149204E61AD2ACAA00796FB3 /* PSLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSLink.h; sourceTree = "<group>"; };
+		149204E81AD2ACAA00796FB3 /* OniPlatformWin32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OniPlatformWin32.h; sourceTree = "<group>"; };
+		149204EB1AD2ACAA00796FB3 /* libNiTE2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libNiTE2.dylib; sourceTree = "<group>"; };
+		149204EC1AD2ACAA00796FB3 /* libOpenNI2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libOpenNI2.dylib; sourceTree = "<group>"; };
+		149205651AD2ACAA00796FB3 /* BufferManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BufferManager.h; sourceTree = "<group>"; };
+		149205661AD2ACAA00796FB3 /* CinderOni.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CinderOni.cpp; sourceTree = "<group>"; };
+		149205671AD2ACAA00796FB3 /* CinderOni.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderOni.h; sourceTree = "<group>"; };
+		149205C21AD2B76C00796FB3 /* NiTE2 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = NiTE2; sourceTree = "<group>"; };
+		149205C31AD2B76C00796FB3 /* OpenNI.ini */ = {isa = PBXFileReference; lastKnownFileType = text; path = OpenNI.ini; sourceTree = "<group>"; };
+		149205C41AD2B76C00796FB3 /* OpenNI2 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = OpenNI2; sourceTree = "<group>"; };
+		149205C51AD2B76C00796FB3 /* NiTE.ini */ = {isa = PBXFileReference; lastKnownFileType = text; path = NiTE.ini; sourceTree = "<group>"; };
+		189785A47709428D94B2D9C3 /* Metronome_Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = "\"\""; path = Metronome_Prefix.pch; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		3B632CDE11C34BE0997B7A2B /* Resources.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Resources.h; path = ../include/Resources.h; sourceTree = "<group>"; };
+		4B5460B8A8A048AEAAC4E31F /* CinderApp.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = CinderApp.icns; path = ../resources/CinderApp.icns; sourceTree = "<group>"; };
 		5323E6B10EAFCA74003A9687 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = /System/Library/Frameworks/CoreVideo.framework; sourceTree = "<absolute>"; };
 		5323E6B50EAFCA7E003A9687 /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = /System/Library/Frameworks/QTKit.framework; sourceTree = "<absolute>"; };
+		743FAA084C7745508F9D3858 /* MetronomeApp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; name = MetronomeApp.cpp; path = ../src/MetronomeApp.cpp; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* Metronome.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Metronome.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		743FAA084C7745508F9D3858 /* MetronomeApp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; path = ../src/MetronomeApp.cpp; sourceTree = "<group>"; name = MetronomeApp.cpp; };
-		3B632CDE11C34BE0997B7A2B /* Resources.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ../include/Resources.h; sourceTree = "<group>"; name = Resources.h; };
-		4B5460B8A8A048AEAAC4E31F /* CinderApp.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = ../resources/CinderApp.icns; sourceTree = "<group>"; name = CinderApp.icns; };
-		940826BB2A914672B72D4846 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; name = Info.plist; };
-		189785A47709428D94B2D9C3 /* Metronome_Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = "\"\""; path = Metronome_Prefix.pch; sourceTree = "<group>"; name = Metronome_Prefix.pch; };
+		940826BB2A914672B72D4846 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,6 +114,8 @@
 				006D720519952D00008149E2 /* CoreMedia.framework in Frameworks */,
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
 				0091D8F90E81B9330029341E /* OpenGL.framework in Frameworks */,
+				1492056B1AD2ACAA00796FB3 /* libOpenNI2.dylib in Frameworks */,
+				1492056A1AD2ACAA00796FB3 /* libNiTE2.dylib in Frameworks */,
 				5323E6B20EAFCA74003A9687 /* CoreVideo.framework in Frameworks */,
 				5323E6B60EAFCA7E003A9687 /* QTKit.framework in Frameworks */,
 				00B784B30FF439BC000DE1D7 /* Accelerate.framework in Frameworks */,
@@ -65,6 +128,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		01B97315FEAEA392516A2CEA /* Blocks */ = {
+			isa = PBXGroup;
+			children = (
+				149204C51AD2ACAA00796FB3 /* Cinder-NI */,
+			);
+			name = Blocks;
+			sourceTree = "<group>";
+		};
 		080E96DDFE201D6D7F000001 /* Source */ = {
 			isa = PBXGroup;
 			children = (
@@ -99,6 +170,130 @@
 			name = "Other Frameworks";
 			sourceTree = "<group>";
 		};
+		149204C51AD2ACAA00796FB3 /* Cinder-NI */ = {
+			isa = PBXGroup;
+			children = (
+				149204C71AD2ACAA00796FB3 /* include */,
+				149204E91AD2ACAA00796FB3 /* lib */,
+				149205641AD2ACAA00796FB3 /* src */,
+			);
+			name = "Cinder-NI";
+			path = "../blocks/Cinder-NI";
+			sourceTree = "<group>";
+		};
+		149204C71AD2ACAA00796FB3 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				149204C81AD2ACAA00796FB3 /* Android-Arm */,
+				149204CA1AD2ACAA00796FB3 /* Driver */,
+				149204CD1AD2ACAA00796FB3 /* KinectProperties.h */,
+				149204CE1AD2ACAA00796FB3 /* Linux-Arm */,
+				149204D01AD2ACAA00796FB3 /* Linux-x86 */,
+				149204D21AD2ACAA00796FB3 /* MacOSX */,
+				149204D41AD2ACAA00796FB3 /* NiTE.h */,
+				149204D51AD2ACAA00796FB3 /* NiteCAPI.h */,
+				149204D61AD2ACAA00796FB3 /* NiteCEnums.h */,
+				149204D71AD2ACAA00796FB3 /* NiteCTypes.h */,
+				149204D81AD2ACAA00796FB3 /* NiteEnums.h */,
+				149204D91AD2ACAA00796FB3 /* NiteVersion.h */,
+				149204DA1AD2ACAA00796FB3 /* OniCAPI.h */,
+				149204DB1AD2ACAA00796FB3 /* OniCEnums.h */,
+				149204DC1AD2ACAA00796FB3 /* OniCProperties.h */,
+				149204DD1AD2ACAA00796FB3 /* OniCTypes.h */,
+				149204DE1AD2ACAA00796FB3 /* OniEnums.h */,
+				149204DF1AD2ACAA00796FB3 /* OniPlatform.h */,
+				149204E01AD2ACAA00796FB3 /* OniProperties.h */,
+				149204E11AD2ACAA00796FB3 /* OniTest.h */,
+				149204E21AD2ACAA00796FB3 /* OniVersion.h */,
+				149204E31AD2ACAA00796FB3 /* OpenNI.h */,
+				149204E41AD2ACAA00796FB3 /* PrimeSense.h */,
+				149204E51AD2ACAA00796FB3 /* PS1080.h */,
+				149204E61AD2ACAA00796FB3 /* PSLink.h */,
+				149204E71AD2ACAA00796FB3 /* Win32 */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		149204C81AD2ACAA00796FB3 /* Android-Arm */ = {
+			isa = PBXGroup;
+			children = (
+				149204C91AD2ACAA00796FB3 /* OniPlatformAndroid-Arm.h */,
+			);
+			path = "Android-Arm";
+			sourceTree = "<group>";
+		};
+		149204CA1AD2ACAA00796FB3 /* Driver */ = {
+			isa = PBXGroup;
+			children = (
+				149204CB1AD2ACAA00796FB3 /* OniDriverAPI.h */,
+				149204CC1AD2ACAA00796FB3 /* OniDriverTypes.h */,
+			);
+			path = Driver;
+			sourceTree = "<group>";
+		};
+		149204CE1AD2ACAA00796FB3 /* Linux-Arm */ = {
+			isa = PBXGroup;
+			children = (
+				149204CF1AD2ACAA00796FB3 /* OniPlatformLinux-Arm.h */,
+			);
+			path = "Linux-Arm";
+			sourceTree = "<group>";
+		};
+		149204D01AD2ACAA00796FB3 /* Linux-x86 */ = {
+			isa = PBXGroup;
+			children = (
+				149204D11AD2ACAA00796FB3 /* OniPlatformLinux-x86.h */,
+			);
+			path = "Linux-x86";
+			sourceTree = "<group>";
+		};
+		149204D21AD2ACAA00796FB3 /* MacOSX */ = {
+			isa = PBXGroup;
+			children = (
+				149204D31AD2ACAA00796FB3 /* OniPlatformMacOSX.h */,
+			);
+			path = MacOSX;
+			sourceTree = "<group>";
+		};
+		149204E71AD2ACAA00796FB3 /* Win32 */ = {
+			isa = PBXGroup;
+			children = (
+				149204E81AD2ACAA00796FB3 /* OniPlatformWin32.h */,
+			);
+			path = Win32;
+			sourceTree = "<group>";
+		};
+		149204E91AD2ACAA00796FB3 /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				149204EA1AD2ACAA00796FB3 /* macosx */,
+			);
+			path = lib;
+			sourceTree = "<group>";
+		};
+		149204EA1AD2ACAA00796FB3 /* macosx */ = {
+			isa = PBXGroup;
+			children = (
+				149205C31AD2B76C00796FB3 /* OpenNI.ini */,
+				149205C51AD2B76C00796FB3 /* NiTE.ini */,
+				149205C21AD2B76C00796FB3 /* NiTE2 */,
+				149205C41AD2B76C00796FB3 /* OpenNI2 */,
+				149204EB1AD2ACAA00796FB3 /* libNiTE2.dylib */,
+				149204EC1AD2ACAA00796FB3 /* libOpenNI2.dylib */,
+			);
+			path = macosx;
+			sourceTree = "<group>";
+		};
+		149205641AD2ACAA00796FB3 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				149205651AD2ACAA00796FB3 /* BufferManager.h */,
+				149205661AD2ACAA00796FB3 /* CinderOni.cpp */,
+				149205671AD2ACAA00796FB3 /* CinderOni.h */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -118,13 +313,6 @@
 				19C28FACFE9D520D11CA2CBB /* Products */,
 			);
 			name = Metronome;
-			sourceTree = "<group>";
-		};
-		01B97315FEAEA392516A2CEA /* Blocks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Blocks;
 			sourceTree = "<group>";
 		};
 		29B97315FDCFA39411CA2CEA /* Headers */ = {
@@ -164,6 +352,7 @@
 				8D1107290486CEB800E47090 /* Resources */,
 				8D11072C0486CEB800E47090 /* Sources */,
 				8D11072E0486CEB800E47090 /* Frameworks */,
+				149205BF1AD2B6ED00796FB3 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -180,6 +369,9 @@
 /* Begin PBXProject section */
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0620;
+			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Metronome" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
@@ -215,6 +407,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				149205BD1AD2ACAA00796FB3 /* CinderOni.cpp in Sources */,
 				AB9D4DB8A37843A9AE94E4E6 /* MetronomeApp.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -225,31 +418,39 @@
 		C01FCF4B08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CINDER_PATH = ../cinder;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEAD_CODE_STRIPPING = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Metronome_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = Metronome_Prefix.pch;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/boost\"";
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"../blocks/Cinder-NI/lib/macosx",
+				);
 				OTHER_LDFLAGS = "\"$(CINDER_PATH)/lib/libcinder_d.a\"";
 				PRODUCT_NAME = Metronome;
-				WRAPPER_EXTENSION = app;
 				SYMROOT = ./build;
+				USER_HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/include\" ../include \"$(SRCROOT)/../blocks/Cinder-NI/include\" \"$(SRCROOT)/../blocks/Cinder-NI/src\"";
+				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
 		};
 		C01FCF4C08A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CINDER_PATH = ../cinder;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -257,35 +458,42 @@
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
 				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Metronome_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"NDEBUG=1",
 					"$(inherited)",
 				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = Metronome_Prefix.pch;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/boost\"";
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"../blocks/Cinder-NI/lib/macosx",
+				);
 				OTHER_LDFLAGS = "\"$(CINDER_PATH)/lib/libcinder.a\"";
 				PRODUCT_NAME = Metronome;
 				STRIP_INSTALLED_PRODUCT = YES;
-				WRAPPER_EXTENSION = app;
 				SYMROOT = ./build;
+				USER_HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/include\" ../include \"$(SRCROOT)/../blocks/Cinder-NI/include\" \"$(SRCROOT)/../blocks/Cinder-NI/src\"";
+				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
 		};
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CINDER_PATH = ../cinder;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = x86_64;
-				CINDER_PATH = "../../Metronome/cinder";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/boost\"";
+				LIBRARY_SEARCH_PATHS = "../blocks/Cinder-NI/lib/macosx";
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 				USER_HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/include\" ../include";
 			};
@@ -294,14 +502,14 @@
 		C01FCF5008A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CINDER_PATH = ../cinder;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = x86_64;
-				CINDER_PATH = "../../Metronome/cinder";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/boost\"";
+				LIBRARY_SEARCH_PATHS = "../blocks/Cinder-NI/lib/macosx";
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				SDKROOT = macosx;
 				USER_HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/include\" ../include";

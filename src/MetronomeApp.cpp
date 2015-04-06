@@ -1,8 +1,11 @@
+#include "cinder/Log.h"
 #include "cinder/Serial.h"
 #include "cinder/app/App.h"
 #include "cinder/app/RendererGl.h"
 #include "cinder/gl/gl.h"
 #include "cinder/params/Params.h"
+
+#include "CinderOni.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -21,6 +24,8 @@ class MetronomeApp : public App
 
 	void setupSerial();
 	Serial mSerial;
+
+	void setupCameras();
 };
 
 void MetronomeApp::setup()
@@ -28,6 +33,7 @@ void MetronomeApp::setup()
 	mParams = params::InterfaceGl::create( "Parameters", ivec2( 200, 300 ) );
 
 	setupSerial();
+	setupCameras();
 }
 
 void MetronomeApp::setupSerial()
@@ -36,6 +42,14 @@ void MetronomeApp::setupSerial()
 	for ( const auto device : devices )
 	{
 		console() << "Device: " << device.getName() << endl;
+	}
+}
+
+void MetronomeApp::setupCameras()
+{
+	if ( openni::OpenNI::initialize() != openni::STATUS_OK )
+	{
+		CI_LOG_E( openni::OpenNI::getExtendedError() );
 	}
 }
 
