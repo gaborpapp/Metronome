@@ -68,10 +68,10 @@ void addParamsLayoutVars( const mndl::ConfigRef &config )
 			TwGetParam( bar, NULL, "iconified", TW_PARAM_INT32, 1, &bi->mIconified );
 
 			sBarInfos[ barName ] = bi;
-			config->addVar( barName + "/Size", &bi->mSize, bi->mSize );
-			config->addVar( barName + "/Position", &bi->mPos, bi->mPos );
-			config->addVar( barName + "/ValuesWidth", &bi->mValuesWidth, bi->mValuesWidth );
-			config->addVar( barName + "/Iconified", &bi->mIconified, bi->mIconified );
+			config->addVar( barName + ".Size", &bi->mSize, bi->mSize );
+			config->addVar( barName + ".Position", &bi->mPos, bi->mPos );
+			config->addVar( barName + ".ValuesWidth", &bi->mValuesWidth, bi->mValuesWidth );
+			config->addVar( barName + ".Iconified", &bi->mIconified, bi->mIconified );
 		}
 
 		windowId++;
