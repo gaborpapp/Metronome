@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# Cinder-NI-libs from bitbucket.org
+curl -L -C - -O https://bitbucket.org/gaborpapp/cinder-libs/downloads/Cinder-NI-lib-2.3.0.4.tar.gz
+tar zxvf Cinder-NI-lib-2.3.0.4.tar.gz -C blocks/Cinder-NI

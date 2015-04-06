@@ -7,6 +7,10 @@ Controller application for Abris Gryllus's digital remake of Ligeti's Poème sym
 	git clone git@github.com:gaborpapp/Metronome.git
 	git submodule update --init --recursive
 
+Download and extract binary libraries:
+
+	./scripts/install_deps.sh
+
 ## Building on OS X with xcode
 
 Build Cinder, either by opening cinder/xcode/cinder.xcodeproj or from the

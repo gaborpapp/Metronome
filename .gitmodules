@@ -2,3 +2,7 @@
 	path = cinder
 	url = https://gaborpapp@bitbucket.org/gaborpapp/cinder.git
 	branch = metronome
+[submodule "blocks/Cinder-NI"]
+	path = blocks/Cinder-NI
+	url = git@github.com:gaborpapp/Cinder-NI-nolibs.git
+	branch = openni2-glNext
