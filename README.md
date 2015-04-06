@@ -1,4 +1,4 @@
-# Metromone
+# Metronome
 
 Controller application for Abris Gryllus's digital remake of Ligeti's Poème symphonique.
 
