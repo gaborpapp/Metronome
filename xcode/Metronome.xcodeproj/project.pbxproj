@@ -23,6 +23,7 @@
 		149205C71AD2B76C00796FB3 /* OpenNI.ini in CopyFiles */ = {isa = PBXBuildFile; fileRef = 149205C31AD2B76C00796FB3 /* OpenNI.ini */; };
 		149205C81AD2B76C00796FB3 /* OpenNI2 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 149205C41AD2B76C00796FB3 /* OpenNI2 */; };
 		149205C91AD2B76C00796FB3 /* NiTE.ini in CopyFiles */ = {isa = PBXBuildFile; fileRef = 149205C51AD2B76C00796FB3 /* NiTE.ini */; };
+		149205CB1AD2C12000796FB3 /* OniCameraManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 149205CA1AD2C12000796FB3 /* OniCameraManager.cpp */; };
 		23AFFB7207C240619BD5BCC1 /* CinderApp.icns in Resources */ = {isa = PBXBuildFile; fileRef = 4B5460B8A8A048AEAAC4E31F /* CinderApp.icns */; };
 		5323E6B20EAFCA74003A9687 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B10EAFCA74003A9687 /* CoreVideo.framework */; };
 		5323E6B60EAFCA7E003A9687 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B50EAFCA7E003A9687 /* QTKit.framework */; };
@@ -93,6 +94,8 @@
 		149205C31AD2B76C00796FB3 /* OpenNI.ini */ = {isa = PBXFileReference; lastKnownFileType = text; path = OpenNI.ini; sourceTree = "<group>"; };
 		149205C41AD2B76C00796FB3 /* OpenNI2 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = OpenNI2; sourceTree = "<group>"; };
 		149205C51AD2B76C00796FB3 /* NiTE.ini */ = {isa = PBXFileReference; lastKnownFileType = text; path = NiTE.ini; sourceTree = "<group>"; };
+		149205CA1AD2C12000796FB3 /* OniCameraManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OniCameraManager.cpp; path = ../src/OniCameraManager.cpp; sourceTree = "<group>"; };
+		149205CC1AD2C14200796FB3 /* OniCameraManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OniCameraManager.h; path = ../include/OniCameraManager.h; sourceTree = "<group>"; };
 		189785A47709428D94B2D9C3 /* Metronome_Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = "\"\""; path = Metronome_Prefix.pch; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
@@ -139,6 +142,7 @@
 		080E96DDFE201D6D7F000001 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				149205CA1AD2C12000796FB3 /* OniCameraManager.cpp */,
 				743FAA084C7745508F9D3858 /* MetronomeApp.cpp */,
 			);
 			name = Source;
@@ -318,6 +322,7 @@
 		29B97315FDCFA39411CA2CEA /* Headers */ = {
 			isa = PBXGroup;
 			children = (
+				149205CC1AD2C14200796FB3 /* OniCameraManager.h */,
 				3B632CDE11C34BE0997B7A2B /* Resources.h */,
 				189785A47709428D94B2D9C3 /* Metronome_Prefix.pch */,
 			);
@@ -409,6 +414,7 @@
 			files = (
 				149205BD1AD2ACAA00796FB3 /* CinderOni.cpp in Sources */,
 				AB9D4DB8A37843A9AE94E4E6 /* MetronomeApp.cpp in Sources */,
+				149205CB1AD2C12000796FB3 /* OniCameraManager.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
