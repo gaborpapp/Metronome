@@ -2,6 +2,7 @@
 
 #include <memory>
 
+#include "cinder/Thread.h"
 #include "cinder/params/Params.h"
 
 #include "CinderOni.h"
@@ -12,6 +13,7 @@ class OniCameraManager
 {
  public:
 	static OniCameraManagerRef create() { return OniCameraManagerRef( new OniCameraManager() ); }
+	~OniCameraManager();
 
  protected:
 	OniCameraManager();
@@ -27,7 +29,14 @@ class OniCameraManager
 	{
 		std::string mName;
 		std::string mUri;
+
+		std::string mProgressMessage;
+		mndl::oni::OniCaptureRef mCapture;
+		std::shared_ptr< std::thread > mOpenThread;
 	};
 
 	std::vector< OniCamera > mOniCameras;
+
+	void openOniCamera( size_t cameraId );
+	void addCameraParams( size_t cameraId );
 };
