@@ -25,6 +25,9 @@ class MetronomeApp : public App
  private:
 	params::InterfaceGlRef mParams;
 
+	float mFps;
+
+	void setupParams();
 	void setupSerial();
 	Serial mSerial;
 
@@ -33,11 +36,17 @@ class MetronomeApp : public App
 
 void MetronomeApp::setup()
 {
-	mParams = params::InterfaceGl::create( "Parameters", ivec2( 200, 300 ) );
+	setupParams();
 
 	mOniCameraManager = OniCameraManager::create();
 
 	setupSerial();
+}
+
+void MetronomeApp::setupParams()
+{
+	mParams = params::InterfaceGl::create( "Parameters", ivec2( 200, 300 ) );
+	mParams->addParam( "Fps", &mFps, true );
 }
 
 void MetronomeApp::setupSerial()
@@ -51,6 +60,8 @@ void MetronomeApp::setupSerial()
 
 void MetronomeApp::update()
 {
+	mFps = getAverageFps();
+
 	mOniCameraManager->update();
 }
 
