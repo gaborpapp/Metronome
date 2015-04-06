@@ -10,6 +10,7 @@
 project.xcworkspace
 xcuserdata/
 *.xccheckout
+xcode/build/
 
 .sconsign.dblite
 *.sw[a-z]
