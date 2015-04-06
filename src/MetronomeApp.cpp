@@ -1,3 +1,5 @@
+#include <vector>
+
 #include "cinder/Log.h"
 #include "cinder/Serial.h"
 #include "cinder/app/App.h"
@@ -5,11 +7,11 @@
 #include "cinder/gl/gl.h"
 #include "cinder/params/Params.h"
 
-#include "CinderOni.h"
-
 using namespace ci;
 using namespace ci::app;
 using namespace std;
+
+#include "OniCameraManager.h"
 
 class MetronomeApp : public App
 {
@@ -25,15 +27,16 @@ class MetronomeApp : public App
 	void setupSerial();
 	Serial mSerial;
 
-	void setupCameras();
+	OniCameraManagerRef mOniCameraManager;
 };
 
 void MetronomeApp::setup()
 {
 	mParams = params::InterfaceGl::create( "Parameters", ivec2( 200, 300 ) );
 
+	mOniCameraManager = OniCameraManager::create();
+
 	setupSerial();
-	setupCameras();
 }
 
 void MetronomeApp::setupSerial()
@@ -44,15 +47,6 @@ void MetronomeApp::setupSerial()
 		console() << "Device: " << device.getName() << endl;
 	}
 }
-
-void MetronomeApp::setupCameras()
-{
-	if ( openni::OpenNI::initialize() != openni::STATUS_OK )
-	{
-		CI_LOG_E( openni::OpenNI::getExtendedError() );
-	}
-}
-
 void MetronomeApp::draw()
 {
 	gl::viewport( getWindowSize() );

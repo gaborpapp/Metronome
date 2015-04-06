@@ -3,7 +3,7 @@ CINDER_PATH = '../cinder/'
 env = Environment()
 
 env['APP_TARGET'] = 'MetronomeApp'
-env['APP_SOURCES'] = ['MetronomeApp.cpp']
+env['APP_SOURCES'] = ['MetronomeApp.cpp', 'OniCameraManager.cpp']
 env['DEBUG'] = 0
 
 env = SConscript('../blocks/Cinder-NI/scons/SConscript', exports = 'env')
