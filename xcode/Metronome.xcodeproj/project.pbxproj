@@ -14,6 +14,8 @@
 		00B784B40FF439BC000DE1D7 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784B00FF439BC000DE1D7 /* AudioToolbox.framework */; };
 		00B784B50FF439BC000DE1D7 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784B10FF439BC000DE1D7 /* AudioUnit.framework */; };
 		00B784B60FF439BC000DE1D7 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784B20FF439BC000DE1D7 /* CoreAudio.framework */; };
+		1449C9ED1AD2D77200DB48B5 /* ParamsUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1449C9EB1AD2D77200DB48B5 /* ParamsUtils.cpp */; };
+		1449C9EE1AD2D77200DB48B5 /* Config.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1449C9EC1AD2D77200DB48B5 /* Config.cpp */; };
 		1492056A1AD2ACAA00796FB3 /* libNiTE2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 149204EB1AD2ACAA00796FB3 /* libNiTE2.dylib */; };
 		1492056B1AD2ACAA00796FB3 /* libOpenNI2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 149204EC1AD2ACAA00796FB3 /* libOpenNI2.dylib */; };
 		149205BD1AD2ACAA00796FB3 /* CinderOni.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 149205661AD2ACAA00796FB3 /* CinderOni.cpp */; };
@@ -58,6 +60,11 @@
 		00B784B10FF439BC000DE1D7 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
 		00B784B20FF439BC000DE1D7 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		1449C9E81AD2D75600DB48B5 /* GlobalData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GlobalData.h; path = ../include/GlobalData.h; sourceTree = "<group>"; };
+		1449C9E91AD2D75600DB48B5 /* Config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Config.h; path = ../include/Config.h; sourceTree = "<group>"; };
+		1449C9EA1AD2D75600DB48B5 /* ParamsUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ParamsUtils.h; path = ../include/ParamsUtils.h; sourceTree = "<group>"; };
+		1449C9EB1AD2D77200DB48B5 /* ParamsUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ParamsUtils.cpp; path = ../src/ParamsUtils.cpp; sourceTree = "<group>"; };
+		1449C9EC1AD2D77200DB48B5 /* Config.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Config.cpp; path = ../src/Config.cpp; sourceTree = "<group>"; };
 		149204C91AD2ACAA00796FB3 /* OniPlatformAndroid-Arm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "OniPlatformAndroid-Arm.h"; sourceTree = "<group>"; };
 		149204CB1AD2ACAA00796FB3 /* OniDriverAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OniDriverAPI.h; sourceTree = "<group>"; };
 		149204CC1AD2ACAA00796FB3 /* OniDriverTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OniDriverTypes.h; sourceTree = "<group>"; };
@@ -139,13 +146,15 @@
 			name = Blocks;
 			sourceTree = "<group>";
 		};
-		080E96DDFE201D6D7F000001 /* Source */ = {
+		080E96DDFE201D6D7F000001 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				1449C9EB1AD2D77200DB48B5 /* ParamsUtils.cpp */,
+				1449C9EC1AD2D77200DB48B5 /* Config.cpp */,
 				149205CA1AD2C12000796FB3 /* OniCameraManager.cpp */,
 				743FAA084C7745508F9D3858 /* MetronomeApp.cpp */,
 			);
-			name = Source;
+			name = Sources;
 			sourceTree = "<group>";
 		};
 		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
@@ -311,7 +320,7 @@
 			children = (
 				01B97315FEAEA392516A2CEA /* Blocks */,
 				29B97315FDCFA39411CA2CEA /* Headers */,
-				080E96DDFE201D6D7F000001 /* Source */,
+				080E96DDFE201D6D7F000001 /* Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
@@ -322,6 +331,9 @@
 		29B97315FDCFA39411CA2CEA /* Headers */ = {
 			isa = PBXGroup;
 			children = (
+				1449C9E81AD2D75600DB48B5 /* GlobalData.h */,
+				1449C9E91AD2D75600DB48B5 /* Config.h */,
+				1449C9EA1AD2D75600DB48B5 /* ParamsUtils.h */,
 				149205CC1AD2C14200796FB3 /* OniCameraManager.h */,
 				3B632CDE11C34BE0997B7A2B /* Resources.h */,
 				189785A47709428D94B2D9C3 /* Metronome_Prefix.pch */,
@@ -413,7 +425,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				149205BD1AD2ACAA00796FB3 /* CinderOni.cpp in Sources */,
+				1449C9ED1AD2D77200DB48B5 /* ParamsUtils.cpp in Sources */,
 				AB9D4DB8A37843A9AE94E4E6 /* MetronomeApp.cpp in Sources */,
+				1449C9EE1AD2D77200DB48B5 /* Config.cpp in Sources */,
 				149205CB1AD2C12000796FB3 /* OniCameraManager.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -448,7 +462,7 @@
 				OTHER_LDFLAGS = "\"$(CINDER_PATH)/lib/libcinder_d.a\"";
 				PRODUCT_NAME = Metronome;
 				SYMROOT = ./build;
-				USER_HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/include\" ../include \"$(SRCROOT)/../blocks/Cinder-NI/include\" \"$(SRCROOT)/../blocks/Cinder-NI/src\"";
+				USER_HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/include\" \"$(CINDER_PATH)/src/AntTweakBar/\" ../include \"$(SRCROOT)/../blocks/Cinder-NI/include\" \"$(SRCROOT)/../blocks/Cinder-NI/src\"";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -482,7 +496,7 @@
 				PRODUCT_NAME = Metronome;
 				STRIP_INSTALLED_PRODUCT = YES;
 				SYMROOT = ./build;
-				USER_HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/include\" ../include \"$(SRCROOT)/../blocks/Cinder-NI/include\" \"$(SRCROOT)/../blocks/Cinder-NI/src\"";
+				USER_HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/include\" \"$(CINDER_PATH)/src/AntTweakBar/\" ../include \"$(SRCROOT)/../blocks/Cinder-NI/include\" \"$(SRCROOT)/../blocks/Cinder-NI/src\"";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
