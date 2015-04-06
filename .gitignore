@@ -16,3 +16,4 @@ xcode/build/
 *.sw[a-z]
 
 MetronomeApp
+config.json
