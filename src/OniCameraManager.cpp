@@ -1,5 +1,6 @@
 #include "cinder/Log.h"
 #include "cinder/app/App.h"
+#include "cinder/gl/gl.h"
 
 #include "OniCameraManager.h"
 
@@ -95,13 +96,51 @@ void OniCameraManager::setupParams()
 			} );
 }
 
+void OniCameraManager::update()
+{
+	for ( auto &cam : mOniCameras )
+	{
+		if ( cam.mCapture && cam.mCapture->checkNewDepthFrame() )
+		{
+			cam.mDepthSurface = Surface16u::create( cam.mCapture->getDepthImage() );
+		}
+	}
+}
+
+void OniCameraManager::draw()
+{
+	vec2 offset( 16.0f );
+	float offsetY = 16.0f;
+
+	for ( auto &cam : mOniCameras )
+	{
+		if ( cam.mDepthSurface )
+		{
+			Rectf rect = cam.mDepthSurface->getBounds();
+			rect.offset( offset );
+			offsetY = math< float >::max( offsetY, rect.getY2() );
+			gl::draw( gl::Texture2d::create( *cam.mDepthSurface ), rect );
+			gl::drawString( cam.mName + "-" + cam.mUri, offset + vec2( 16.0f ) );
+
+			if ( rect.getX2() > app::getWindowWidth() )
+			{
+				offset = vec2( 16.0f, offsetY );
+			}
+			else
+			{
+				offset = rect.getUpperRight() + vec2( 16.0f, 0.0f );
+			}
+		}
+	}
+}
+
 void OniCameraManager::addCameraParams( size_t cameraId )
 {
 	auto &cam = mOniCameras[ cameraId ];
-	auto groupName = "`" + cam.mName + "-" + cam.mUri + "`";
-	auto sepName = "`" + cam.mName + "-" + cam.mUri + "-sep`";
+	auto name = cam.mName + "-" + cam.mUri;
+	auto sepName = name + "-sep";
 	mParams->addSeparator( sepName );
-	mParams->addParam( "Progress", &cam.mProgressMessage, true ).group( groupName );
+	mParams->addParam( name + " progress", &cam.mProgressMessage, true ).group( name );
 }
 
 void OniCameraManager::openOniCamera( size_t cameraId )

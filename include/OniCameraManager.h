@@ -2,6 +2,7 @@
 
 #include <memory>
 
+#include "cinder/Surface.h"
 #include "cinder/Thread.h"
 #include "cinder/params/Params.h"
 
@@ -14,6 +15,9 @@ class OniCameraManager
  public:
 	static OniCameraManagerRef create() { return OniCameraManagerRef( new OniCameraManager() ); }
 	~OniCameraManager();
+
+	void update();
+	void draw();
 
  protected:
 	OniCameraManager();
@@ -33,6 +37,8 @@ class OniCameraManager
 		std::string mProgressMessage;
 		mndl::oni::OniCaptureRef mCapture;
 		std::shared_ptr< std::thread > mOpenThread;
+
+		ci::Surface16uRef mDepthSurface;
 	};
 
 	std::vector< OniCamera > mOniCameras;

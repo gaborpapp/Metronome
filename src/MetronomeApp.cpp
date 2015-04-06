@@ -18,6 +18,7 @@ class MetronomeApp : public App
  public:
 	void setup() override;
 	void draw() override;
+	void update() override;
 
 	void keyDown( KeyEvent event ) override;
 
@@ -47,12 +48,20 @@ void MetronomeApp::setupSerial()
 		console() << "Device: " << device.getName() << endl;
 	}
 }
+
+void MetronomeApp::update()
+{
+	mOniCameraManager->update();
+}
+
 void MetronomeApp::draw()
 {
 	gl::viewport( getWindowSize() );
 	gl::setMatricesWindow( getWindowSize() );
 
 	gl::clear();
+
+	mOniCameraManager->draw();
 
 	mParams->draw();
 }
