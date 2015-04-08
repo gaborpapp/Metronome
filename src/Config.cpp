@@ -26,7 +26,6 @@ void Config::write( const ci::DataTargetRef &target )
 
 ci::JsonTree & Config::addParent( const std::string &relativePath, ci::JsonTree &json, std::string &childKey )
 {
-	CI_LOG_I( relativePath );
 	std::vector< std::string > tokens = ci::split( relativePath, "." );
 	std::string parentId = "";
 	for ( int i = 0; i < tokens.size() - 1; i++ )
@@ -36,20 +35,16 @@ ci::JsonTree & Config::addParent( const std::string &relativePath, ci::JsonTree 
 		{
 			if ( parentId == "" )
 			{
-				CI_LOG_I( "root obj: " << token );
 				json.pushBack( ci::JsonTree::makeArray( token ) );
 			}
 			else
 			{
-				CI_LOG_I( "par: " << parentId << " obj: " << token );
 				json.getChild( parentId ).addChild( ci::JsonTree::makeArray( token ) );
 			}
 		}
 		parentId += token + ( ( i < tokens.size() - 2 ) ? "." : "" );
 	}
 	childKey = tokens.back();
-	CI_LOG_I( childKey << " p:" << parentId );
-	CI_LOG_I( json );
 	return ( parentId == "" ) ? json : json.getChild( parentId );
 }
 
