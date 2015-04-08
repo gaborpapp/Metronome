@@ -10,6 +10,7 @@
 #include "Config.h"
 #include "GlobalData.h"
 #include "OniCameraManager.h"
+#include "ChannelView.h"
 #include "ParamsUtils.h"
 
 using namespace ci;
@@ -24,6 +25,7 @@ class MetronomeApp : public App
 	void update() override;
 
 	void keyDown( KeyEvent event ) override;
+    void mouseDrag( MouseEvent event ) override;
 
 	void cleanup() override;
 
@@ -36,6 +38,8 @@ class MetronomeApp : public App
 	void setupSerial();
 	Serial mSerial;
 
+    ChannelView channelView;
+    
 	OniCameraManagerRef mOniCameraManager;
 
 	void readConfig();
@@ -52,6 +56,8 @@ void MetronomeApp::setup()
 	mOniCameraManager = OniCameraManager::create();
 
 	setupSerial();
+    
+    channelView.setup();
 
 	readConfig();
 	mndl::params::showAllParams( true );
@@ -86,9 +92,17 @@ void MetronomeApp::draw()
 
 	gl::clear();
 
+    channelView.draw();
+    
 	mOniCameraManager->draw();
 
 	mParams->draw();
+    
+    
+}
+
+void MetronomeApp::mouseDrag(MouseEvent event) {
+    channelView.controlpos = event.getPos();
 }
 
 void MetronomeApp::keyDown( KeyEvent event )
