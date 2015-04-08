@@ -7,11 +7,6 @@
 #include "cinder/gl/gl.h"
 #include "Resources.h"
 
-using namespace cinder;
-using namespace ci;
-using namespace ci::app;
-using namespace std;
-
 class ChannelView {
 public:
     
@@ -20,6 +15,6 @@ public:
     void setup();
     void draw();
     
-    Channel mImageChannel;
-    vec2 controlpos;
+	ci::Channel mImageChannel;
+	ci::vec2 controlpos;
 };

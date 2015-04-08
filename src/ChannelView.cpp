@@ -1,4 +1,10 @@
+#include "cinder/app/App.h"
+
 #include "ChannelView.h"
+
+using namespace ci;
+using namespace ci::app;
+using namespace std;
 
 ChannelView::ChannelView(){};
 
