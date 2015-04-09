@@ -20,7 +20,7 @@ using namespace std;
 class MetronomeApp : public App
 {
  public:
-	void setup() override;
+    void setup() override;
 	void draw() override;
 	void update() override;
 
@@ -38,6 +38,7 @@ class MetronomeApp : public App
 	void setupSerial();
 	Serial mSerial;
 
+    vec2 controlpos;
     ChannelView channelView;
     
 	OniCameraManagerRef mOniCameraManager;
@@ -48,6 +49,7 @@ class MetronomeApp : public App
 
 void MetronomeApp::setup()
 {
+    
 	GlobalData &gd = GlobalData::get();
 	gd.mConfig = mndl::Config::create();
 
@@ -83,6 +85,13 @@ void MetronomeApp::update()
 	mFps = getAverageFps();
 
 	mOniCameraManager->update();
+    
+    //  blob positions between 0 - 1
+    vector<vec2> testPoints;
+    testPoints.push_back(vec2( controlpos.x, controlpos.y ));
+    testPoints.push_back(vec2( 1, 1 ));
+
+    channelView.update(testPoints);
 }
 
 void MetronomeApp::draw()
@@ -90,7 +99,7 @@ void MetronomeApp::draw()
 	gl::viewport( getWindowSize() );
 	gl::setMatricesWindow( getWindowSize() );
 
-	gl::clear();
+	gl::clear( Color( 0.4, 0.4, 0.4 ), true );
 
     channelView.draw();
     
@@ -102,7 +111,9 @@ void MetronomeApp::draw()
 }
 
 void MetronomeApp::mouseDrag(MouseEvent event) {
-    channelView.controlpos = event.getPos();
+    // channelView.controlpos = event.getPos();
+    controlpos.x = event.getPos().x / (float)getWindowWidth();
+    controlpos.y = event.getPos().y / (float)getWindowHeight();
 }
 
 void MetronomeApp::keyDown( KeyEvent event )

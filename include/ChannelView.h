@@ -13,8 +13,20 @@ public:
     ChannelView();
     
     void setup();
+    void update(std::vector<ci::vec2> cps);
     void draw();
     
-	ci::Channel mImageChannel;
-	ci::vec2 controlpos;
+    std::string getResult();
+    
+    ci::Channel baseChannel;
+    ci::Channel customChannel;
+    ci::Surface customSurface;
+    
+    std::vector<ci::vec2> rawControlPoints;
+    std::vector<ci::vec2> mappedControlPoints;
+    std::vector<float> baseColors;
+    
+    ci::vec2 offset;
+    void transparentArea( ci::Surface *surface, ci::Area area );
+	
 };

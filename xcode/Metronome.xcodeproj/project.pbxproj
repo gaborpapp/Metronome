@@ -31,6 +31,9 @@
 		5323E6B60EAFCA7E003A9687 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B50EAFCA7E003A9687 /* QTKit.framework */; };
 		7857D2161AD583F70076FA6B /* squares.png in Resources */ = {isa = PBXBuildFile; fileRef = 7857D2151AD583F70076FA6B /* squares.png */; };
 		7857D2181AD584520076FA6B /* ChannelView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7857D2171AD584520076FA6B /* ChannelView.cpp */; };
+		78714F331AD6744800026687 /* baseImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 78714F311AD6744800026687 /* baseImage.png */; };
+		78714F341AD6744800026687 /* customImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 78714F321AD6744800026687 /* customImage.png */; };
+		78714F361AD6937D00026687 /* customImageAlpha.png in Resources */ = {isa = PBXBuildFile; fileRef = 78714F351AD6937D00026687 /* customImageAlpha.png */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		AB9D4DB8A37843A9AE94E4E6 /* MetronomeApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 743FAA084C7745508F9D3858 /* MetronomeApp.cpp */; };
 /* End PBXBuildFile section */
@@ -116,6 +119,9 @@
 		7857D2151AD583F70076FA6B /* squares.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = squares.png; path = ../resources/squares.png; sourceTree = "<group>"; };
 		7857D2171AD584520076FA6B /* ChannelView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ChannelView.cpp; path = ../src/ChannelView.cpp; sourceTree = "<group>"; };
 		7857D2191AD584640076FA6B /* ChannelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChannelView.h; path = ../include/ChannelView.h; sourceTree = "<group>"; };
+		78714F311AD6744800026687 /* baseImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = baseImage.png; path = ../resources/baseImage.png; sourceTree = "<group>"; };
+		78714F321AD6744800026687 /* customImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = customImage.png; path = ../resources/customImage.png; sourceTree = "<group>"; };
+		78714F351AD6937D00026687 /* customImageAlpha.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = customImageAlpha.png; path = ../resources/customImageAlpha.png; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* Metronome.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Metronome.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		940826BB2A914672B72D4846 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -351,6 +357,9 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				78714F351AD6937D00026687 /* customImageAlpha.png */,
+				78714F311AD6744800026687 /* baseImage.png */,
+				78714F321AD6744800026687 /* customImage.png */,
 				7857D2151AD583F70076FA6B /* squares.png */,
 				4B5460B8A8A048AEAAC4E31F /* CinderApp.icns */,
 				940826BB2A914672B72D4846 /* Info.plist */,
@@ -421,8 +430,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				78714F341AD6744800026687 /* customImage.png in Resources */,
 				7857D2161AD583F70076FA6B /* squares.png in Resources */,
 				23AFFB7207C240619BD5BCC1 /* CinderApp.icns in Resources */,
+				78714F331AD6744800026687 /* baseImage.png in Resources */,
+				78714F361AD6937D00026687 /* customImageAlpha.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
