@@ -5,6 +5,8 @@
 #include "cinder/Surface.h"
 #include "cinder/ImageIo.h"
 #include "cinder/gl/gl.h"
+#include "cinder/Rand.h"
+
 #include "Resources.h"
 
 class ChannelView {
@@ -16,9 +18,11 @@ public:
     void update(std::vector<ci::vec2> cps);
     void draw();
     
+    ci::Rand rnd;
+    
     std::string getResult();
     
-    ci::Channel baseChannel;
+    ci::Channel32f baseChannel;
     ci::Channel customChannel;
     ci::Surface customSurface;
     
@@ -28,5 +32,5 @@ public:
     
     ci::vec2 offset;
     void transparentArea( ci::Surface *surface, ci::Area area );
-	
+    void manipulateChannel( ci::Channel32f *channel, ci::Area area );
 };

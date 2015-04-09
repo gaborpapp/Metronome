@@ -14,6 +14,8 @@ void ChannelView::setup() {
     baseChannel = loadImage( loadResource( BASE_IMAGE ) ) ;
     customSurface = loadImage( loadResource( CA_IMAGE ))  ;
     transparentArea( &customSurface, Area( 0, 0, customSurface.getWidth(), customSurface.getHeight() ) );
+    
+    manipulateChannel( &baseChannel, Area( 0, 0, baseChannel.getWidth(), baseChannel.getHeight() ) );
 }
 
 void ChannelView::update( vector<vec2> cps ) {
@@ -60,12 +62,28 @@ void ChannelView::transparentArea( Surface *surface, Area area ) {
     }
 }
 
+void ChannelView::manipulateChannel( Channel32f *channel, Area area ) {
+    Channel32f::Iter iter = channel->getIter( area );
+    while( iter.line() ) {
+        while( iter.pixel() ) {
+            iter.v() = rnd.nextFloat();
+        }
+    }
+}
 
 string ChannelView::getResult() {
-    string result = "";
+    string baseChannelGrayValues = "";
     
-    //  todo: map baseColor values to bpm values & convert to string
+    Area area( 0, 0, baseChannel.getWidth(), baseChannel.getHeight() );
+    Channel32f::Iter iter = baseChannel.getIter( area );
+    while( iter.line() ) {
+        while( iter.pixel() ) {
+            float baseValue = iter.v();
+            baseChannelGrayValues.append(to_string(baseValue) + " ");
+        }
+    }
     
-    return result;
+    return baseChannelGrayValues;
 }
+
 
