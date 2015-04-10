@@ -15,7 +15,7 @@ void ChannelView::setup() {
     customSurface = loadImage( loadResource( CA_IMAGE ))  ;
     transparentArea( &customSurface, Area( 0, 0, customSurface.getWidth(), customSurface.getHeight() ) );
     
-    manipulateChannel( &baseChannel, Area( 0, 0, baseChannel.getWidth(), baseChannel.getHeight() ) );
+    //manipulateChannel( &baseChannel, Area( 0, 0, baseChannel.getWidth(), baseChannel.getHeight() ) );
 }
 
 void ChannelView::update( vector<vec2> cps ) {
@@ -47,7 +47,6 @@ void ChannelView::draw() {
         Area cRect( ( offset.x + p.x * bRect.getWidth() ) , ( offset.y + p.y * bRect.getHeight() ) ,
                     ( offset.x + p.x * bRect.getWidth() ) + customChannel.getWidth() * size,     ( offset.y + p.y * bRect.getHeight() ) + customChannel.getHeight() * size );
         
-        
         gl::enableAlphaBlending();
         gl::draw( gl::Texture2d::create( customSurface ), cRect );
     }
@@ -69,6 +68,20 @@ void ChannelView::manipulateChannel( Channel32f *channel, Area area ) {
             iter.v() = rnd.nextFloat();
         }
     }
+}
+
+string ChannelView::getRoundedChannelPixels() {
+    string roundedChannelPixels = "";
+    Area area( 0, 0, customChannel.getWidth(), customChannel.getHeight() );
+    Channel::Iter iter = customChannel.getIter( area );
+    while( iter.line() ) {
+        roundedChannelPixels.append("\n");
+        while( iter.pixel() ) {
+            int baseValue = iter.v() / 2;
+            roundedChannelPixels.append(to_string(baseValue) + " ");
+        }
+    }
+    return roundedChannelPixels;
 }
 
 string ChannelView::getResult() {

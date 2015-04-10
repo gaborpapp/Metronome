@@ -21,6 +21,7 @@ public:
     ci::Rand rnd;
     
     std::string getResult();
+    std::string getRoundedChannelPixels();
     
     ci::Channel32f baseChannel;
     ci::Channel customChannel;

@@ -156,8 +156,9 @@ void MetronomeApp::keyDown( KeyEvent event )
 			break;
         
         case KeyEvent::KEY_SPACE:
-            cout << "Gray pixel values of randomized baseChannel: " << endl;
-            cout << channelView.getResult() << endl;
+            //  cout << "Gray pixel values of randomized baseChannel: " << endl;
+            //  cout << channelView.getResult() << endl;
+            cout << channelView.getRoundedChannelPixels() << endl;
             break;
 
 		case KeyEvent::KEY_ESCAPE:
