@@ -5,7 +5,8 @@ env = Environment()
 env['APP_TARGET'] = 'MetronomeApp'
 env['APP_SOURCES'] = ['MetronomeApp.cpp', 'ChannelView.cpp',
 		'Config.cpp', 'OniCameraManager.cpp', 'ParamsUtils.cpp']
-env['RESOURCES'] = ['squares.png']
+env['RESOURCES'] = ['baseImage.png', 'customImage.png', 'customImageAlpha.png',
+		'patternImage.png', 'patternImageAlpha.png']
 env['DEBUG'] = 0
 
 env = SConscript('../blocks/Cinder-NI/scons/SConscript', exports = 'env')
