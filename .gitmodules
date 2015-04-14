@@ -6,3 +6,6 @@
 	path = blocks/Cinder-NI
 	url = git@github.com:gaborpapp/Cinder-NI-nolibs.git
 	branch = openni2-glNext
+[submodule "blocks/Cinder-OpenCV"]
+	path = blocks/Cinder-OpenCV
+	url = https://github.com/gaborpapp/Cinder-OpenCV-nolibs.git
