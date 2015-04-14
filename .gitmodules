@@ -9,3 +9,6 @@
 [submodule "blocks/Cinder-OpenCV"]
 	path = blocks/Cinder-OpenCV
 	url = https://github.com/gaborpapp/Cinder-OpenCV-nolibs.git
+[submodule "blocks/Cinder-BlobTracker"]
+	path = blocks/Cinder-BlobTracker
+	url = https://github.com/gaborpapp/Cinder-BlobTracker.git
