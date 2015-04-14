@@ -15,7 +15,8 @@ public:
     ChannelView();
     
     void setup();
-    void update(std::vector<ci::vec2> cps);
+	//! Updates the blob grid coordinates in \a cps. Each blob position is sent as an integer coordiate in the grid.
+    void update(const std::vector<ci::ivec2> &cps);
     void draw();
     
     ci::Rand rnd;
@@ -27,8 +28,8 @@ public:
     ci::Channel customChannel;
     ci::Surface customSurface;
     
-    std::vector<ci::vec2> rawControlPoints;
-    std::vector<ci::vec2> mappedControlPoints;
+    std::vector<ci::ivec2> rawControlPoints;
+    std::vector<ci::ivec2> mappedControlPoints;
     std::vector<float> baseColors;
     
     ci::vec2 offset;

@@ -18,8 +18,8 @@ void ChannelView::setup() {
     //manipulateChannel( &baseChannel, Area( 0, 0, baseChannel.getWidth(), baseChannel.getHeight() ) );
 }
 
-void ChannelView::update( vector<vec2> cps ) {
-    vector<vec2>tmpPts = cps;
+void ChannelView::update( const vector<ivec2> &cps ) {
+    vector<ivec2>tmpPts = cps;
     rawControlPoints = cps;
     
     // map incoming coordinates from 0 - 1 to 0  - 10

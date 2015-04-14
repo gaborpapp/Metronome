@@ -38,7 +38,7 @@ class MetronomeApp : public App
 	void setupSerial();
 	Serial mSerial;
 
-    vec2 controlpos;
+    ivec2 controlpos;
     ChannelView channelView;
     
 	OniCameraManagerRef mOniCameraManager;
@@ -86,10 +86,10 @@ void MetronomeApp::update()
 
 	mOniCameraManager->update();
     
-    //  blob positions between 0 - 1
-    vector<vec2> testPoints;
-    testPoints.push_back(vec2( controlpos.x, controlpos.y ));
-    testPoints.push_back(vec2( 1, 1 ));
+    // blob positions with grid coordinates
+    vector<ivec2> testPoints;
+    testPoints.push_back(ivec2( controlpos.x, controlpos.y ));
+    testPoints.push_back(ivec2( 1, 1 ));
 
     channelView.update(testPoints);
 }
@@ -111,9 +111,8 @@ void MetronomeApp::draw()
 }
 
 void MetronomeApp::mouseDrag(MouseEvent event) {
-    // channelView.controlpos = event.getPos();
-    controlpos.x = event.getPos().x / (float)getWindowWidth();
-    controlpos.y = event.getPos().y / (float)getWindowHeight();
+	const vec2 scale( 10 );
+	controlpos = vec2( event.getPos() ) / vec2( getWindowSize() ) * scale;
 }
 
 void MetronomeApp::keyDown( KeyEvent event )
