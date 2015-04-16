@@ -23,28 +23,49 @@ void ChannelView::update( const vector<ivec2> &cps ) {
 }
 
 void ChannelView::draw() {
-    // todo: add color values of each customChannel & store them in baseColors vector
-    // keep in mind x/y offset of customChannels
-    
-    //...
-    
-    //  showing enlarged images to see what's happening
+    /*
+     
+    //  for display only
     float size = 5;
-    
-    Area bRect( offset.x + baseChannel.getWidth() * size, offset.y + baseChannel.getHeight() * size, offset.x + baseChannel.getWidth() * size * 2, offset.y + baseChannel.getHeight() * size * 2 );
+    Area bRect( offset.x, offset.y, offset.x + baseChannel.getWidth() * size, offset.y + baseChannel.getHeight() * size );
     gl::draw( gl::Texture2d::create( baseChannel ), bRect );
+     */
+    
+    //  set base channel to black
+    Area baseArea = Area( 0, 0, baseChannel.getWidth(), baseChannel.getHeight() );
+    Channel32f::Iter iter = baseChannel.getIter( baseArea );
+    while( iter.line() ) {
+        while( iter.pixel() ) {
+            iter.v() = 0;
+        }
+    }
 
-    for( auto p : controlPoints ) {
+    //  add customChannel colors to baseChannel
+    for( auto tp : controlPoints ) {
+        vec2 p = vec2(baseChannel.getWidth() - tp.x, baseChannel.getHeight() - tp.y );
         
+        Area customArea(p.x, p.y, p.x + baseChannel.getWidth(), p.y + baseChannel.getHeight() );
+        
+        Channel::Iter iter = customChannel.getIter( customArea );
+        
+        while( iter.line() ) {
+            while( iter.pixel() ) {
+                ivec2 setpos(iter.x() - p.x , iter.y() - p.y ) ;
+                baseChannel.setValue( setpos, baseChannel.getValue(setpos) + iter.v() );
+            }
+        }
+        
+        /*
         //  map values between 0 - 1 for displaying
         GlobalData &gd = GlobalData::get();
         vec2 mapPt = vec2( remap( p.x, 0, gd.gridSize, 0, 1 ), remap( p.y, 0, gd.gridSize, 0, 1 ) );
         
         Area cRect( ( offset.x + mapPt.x * bRect.getWidth() ) , ( offset.y + mapPt.y * bRect.getHeight() ) ,
-                    ( offset.x + mapPt.x * bRect.getWidth() ) + customChannel.getWidth() * size,     ( offset.y + mapPt.y * bRect.getHeight() ) + customChannel.getHeight() * size );
+                    //( offset.x + mapPt.x * bRect.getWidth() ) + customChannel.getWidth() * size,     ( offset.y + mapPt.y * bRect.getHeight() ) + customChannel.getHeight() * size );
         
         gl::enableAlphaBlending();
         gl::draw( gl::Texture2d::create( customSurface ), cRect );
+         */
     }
 }
 
@@ -90,9 +111,10 @@ string ChannelView::getResult() {
     Area area( 0, 0, baseChannel.getWidth(), baseChannel.getHeight() );
     Channel32f::Iter iter = baseChannel.getIter( area );
     while( iter.line() ) {
+        baseChannelGrayValues.append("\n");
         while( iter.pixel() ) {
-            float baseValue = iter.v();
-            baseChannelGrayValues.append(to_string(baseValue) + " ");
+            float baseValue = iter.v() / 10;
+            baseChannelGrayValues.append(to_string((int)baseValue) + " ");
         }
     }
     

@@ -88,11 +88,12 @@ void MetronomeApp::update()
 	mOniCameraManager->update();
     
     // blob positions with grid coordinates
-    vector<ivec2> testPoints;
-    testPoints.push_back(ivec2( controlpos.x, controlpos.y ));
-    testPoints.push_back(ivec2( 18, 18 ));
-
-    channelView.update(testPoints);
+    vector<ivec2> blobCenters;
+    
+    blobCenters.push_back(ivec2( 0, 0 ));
+    //blobCenters.push_back(ivec2( 9, 0 ));
+    
+    channelView.update( blobCenters );
 }
 
 void MetronomeApp::draw()
@@ -156,9 +157,8 @@ void MetronomeApp::keyDown( KeyEvent event )
 			break;
         
         case KeyEvent::KEY_SPACE:
-            //  cout << "Gray pixel values of randomized baseChannel: " << endl;
-            //  cout << channelView.getResult() << endl;
-            cout << channelView.getRoundedChannelPixels() << endl;
+            cout << channelView.getResult() << endl;
+            //  cout << channelView.getRoundedChannelPixels() << endl;
             break;
 
 		case KeyEvent::KEY_ESCAPE:
