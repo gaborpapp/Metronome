@@ -10,7 +10,7 @@ ChannelView::ChannelView(){};
 
 void ChannelView::setup() {
     offset = vec2(getWindowWidth() / 4, getWindowHeight() / 2 ) ;
-    customChannel = loadImage( loadResource( C_IMAGE ) ) ;
+    customChannel = Surface8u( loadImage( loadResource( C_IMAGE ) ) ).getChannelRed();
     baseChannel = loadImage( loadResource( BASE_IMAGE ) ) ;
     customSurface = loadImage( loadResource( CA_IMAGE ))  ;
     transparentArea( &customSurface, Area( 0, 0, customSurface.getWidth(), customSurface.getHeight() ) );
@@ -77,7 +77,7 @@ string ChannelView::getRoundedChannelPixels() {
     while( iter.line() ) {
         roundedChannelPixels.append("\n");
         while( iter.pixel() ) {
-            int baseValue = iter.v() / 2;
+            int baseValue = iter.v() / 10;
             roundedChannelPixels.append(to_string(baseValue) + " ");
         }
     }
