@@ -52,7 +52,8 @@ void MetronomeApp::setup()
     
 	GlobalData &gd = GlobalData::get();
 	gd.mConfig = mndl::Config::create();
-
+    gd.gridSize = 18;
+    
 	setupParams();
 
 	mOniCameraManager = OniCameraManager::create();
@@ -89,7 +90,7 @@ void MetronomeApp::update()
     // blob positions with grid coordinates
     vector<ivec2> testPoints;
     testPoints.push_back(ivec2( controlpos.x, controlpos.y ));
-    testPoints.push_back(ivec2( 1, 1 ));
+    testPoints.push_back(ivec2( 18, 18 ));
 
     channelView.update(testPoints);
 }

@@ -28,11 +28,12 @@ public:
     ci::Channel customChannel;
     ci::Surface customSurface;
     
-    std::vector<ci::ivec2> rawControlPoints;
-    std::vector<ci::ivec2> mappedControlPoints;
+    std::vector<ci::ivec2> controlPoints;
     std::vector<float> baseColors;
     
     ci::vec2 offset;
     void transparentArea( ci::Surface *surface, ci::Area area );
     void manipulateChannel( ci::Channel32f *channel, ci::Area area );
+    
+    float remap(float val, float inMin, float inMax, float outMin, float outMax);
 };

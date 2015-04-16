@@ -1,5 +1,5 @@
 #include "cinder/app/App.h"
-
+#include "GlobalData.h"
 #include "ChannelView.h"
 
 using namespace ci;
@@ -19,16 +19,7 @@ void ChannelView::setup() {
 }
 
 void ChannelView::update( const vector<ivec2> &cps ) {
-    vector<ivec2>tmpPts = cps;
-    rawControlPoints = cps;
-    
-    // map incoming coordinates from 0 - 1 to 0  - 10
-    for( auto &p : tmpPts) {
-        p.x =  p.x * 10;
-        p.y =  p.y * 10;
-    }
-    
-    mappedControlPoints = tmpPts;
+    controlPoints = cps;
 }
 
 void ChannelView::draw() {
@@ -42,14 +33,23 @@ void ChannelView::draw() {
     
     Area bRect( offset.x + baseChannel.getWidth() * size, offset.y + baseChannel.getHeight() * size, offset.x + baseChannel.getWidth() * size * 2, offset.y + baseChannel.getHeight() * size * 2 );
     gl::draw( gl::Texture2d::create( baseChannel ), bRect );
-    
-    for( auto p : rawControlPoints ) {
-        Area cRect( ( offset.x + p.x * bRect.getWidth() ) , ( offset.y + p.y * bRect.getHeight() ) ,
-                    ( offset.x + p.x * bRect.getWidth() ) + customChannel.getWidth() * size,     ( offset.y + p.y * bRect.getHeight() ) + customChannel.getHeight() * size );
+
+    for( auto p : controlPoints ) {
+        
+        //  map values between 0 - 1 for displaying
+        GlobalData &gd = GlobalData::get();
+        vec2 mapPt = vec2( remap( p.x, 0, gd.gridSize, 0, 1 ), remap( p.y, 0, gd.gridSize, 0, 1 ) );
+        
+        Area cRect( ( offset.x + mapPt.x * bRect.getWidth() ) , ( offset.y + mapPt.y * bRect.getHeight() ) ,
+                    ( offset.x + mapPt.x * bRect.getWidth() ) + customChannel.getWidth() * size,     ( offset.y + mapPt.y * bRect.getHeight() ) + customChannel.getHeight() * size );
         
         gl::enableAlphaBlending();
         gl::draw( gl::Texture2d::create( customSurface ), cRect );
     }
+}
+
+float ChannelView::remap(float val, float inMin, float inMax, float outMin, float outMax) {
+    return outMin + (outMax - outMin) * ((val - inMin) / (inMax - inMin));
 }
 
 void ChannelView::transparentArea( Surface *surface, Area area ) {
