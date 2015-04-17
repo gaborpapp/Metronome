@@ -67,6 +67,13 @@ void OniCameraManager::setupCameras()
 
 		CI_LOG_I( oniCam.mName << " " << oniCam.mUri << " " << oniCam.mSerial );
 	}
+
+	// sorting cameras by serial number retains order
+	std::sort( mOniCameras.begin(), mOniCameras.end(),
+			[]( const OniCamera &cam0, const OniCamera &cam1 )
+			{
+				return cam0.mSerial < cam1.mSerial;
+			} );
 }
 
 void OniCameraManager::setupParams()
@@ -82,7 +89,7 @@ void OniCameraManager::setupParams()
 		{
 			continue;
 		}
-		cameraNames.push_back( c.mName + "-" + c.mUri );
+		cameraNames.push_back( c.mName + "-" + c.mSerial );
 	}
 	if ( cameraNames.size() == 1 )
 	{
@@ -154,7 +161,7 @@ void OniCameraManager::draw()
 
 			rect.offset( offset );
 			gl::draw( gl::Texture2d::create( *cam.mDepthSurface ), rect );
-			gl::drawString( cam.mName + "-" + cam.mUri, offset + vec2( margin ) );
+			gl::drawString( cam.mName + "-" + cam.mSerial, offset + vec2( margin ) );
 
 			offset.x += rect.getWidth() + margin;
 		}
@@ -164,7 +171,7 @@ void OniCameraManager::draw()
 void OniCameraManager::addCameraParams( size_t cameraId )
 {
 	auto &cam = mOniCameras[ cameraId ];
-	auto name = cam.mName + "-" + cam.mUri;
+	auto name = cam.mName + "-" + cam.mSerial;
 	auto sepName = name + "-sep";
 	mParams->addSeparator( sepName );
 	mParams->addParam( name + " progress", &cam.mProgressMessage, true ).group( name );
