@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include "cinder/Json.h"
 #include "cinder/Log.h"
 #include "cinder/Utilities.h"
