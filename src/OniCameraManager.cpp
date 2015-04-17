@@ -1,5 +1,6 @@
 #include "cinder/Json.h"
 #include "cinder/Log.h"
+#include "cinder/Utilities.h"
 #include "cinder/app/App.h"
 #include "cinder/gl/gl.h"
 
@@ -272,6 +273,9 @@ void OniCameraManager::readCameraConfig( const ci::DataSourceRef &source )
 		}
 
 		setupOpenCamera( cameraId );
+		// NOTE: without this sleep a missing camera can lock the opening of
+		// some of the existing cameras for some unknown reason
+		ci::sleep( 100 );
 	}
 }
 
