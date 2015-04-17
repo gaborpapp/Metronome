@@ -91,7 +91,7 @@ void MetronomeApp::update()
 	blobCenters.push_back(ivec2( 0, 0 ));
 	//blobCenters.push_back(ivec2( 9, 0 ));
 
-	channelView.update( blobCenters );
+	mChannelView.update( blobCenters );
 }
 
 void MetronomeApp::draw()
@@ -154,7 +154,7 @@ void MetronomeApp::keyDown( KeyEvent event )
 			break;
 
 		case KeyEvent::KEY_SPACE:
-			cout << channelView.getResult() << endl;
+			cout << mChannelView.getResult() << endl;
 			//  cout << channelView.getRoundedChannelPixels() << endl;
 			break;
 

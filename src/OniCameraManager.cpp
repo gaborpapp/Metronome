@@ -109,27 +109,25 @@ void OniCameraManager::update()
 
 void OniCameraManager::draw()
 {
-	vec2 offset( 16.0f );
-	float offsetY = 16.0f;
+	const float margin = 16.0f;
+	vec2 offset( margin );
+	float offsetY = margin;
 
 	for ( auto &cam : mOniCameras )
 	{
 		if ( cam.mDepthSurface )
 		{
 			Rectf rect = cam.mDepthSurface->getBounds();
-			rect.offset( offset );
-			offsetY = math< float >::max( offsetY, rect.getY2() );
-			gl::draw( gl::Texture2d::create( *cam.mDepthSurface ), rect );
-			gl::drawString( cam.mName + "-" + cam.mUri, offset + vec2( 16.0f ) );
+			if ( rect.getX2() + offset.x > app::getWindowWidth() )
+			{
+				offset = vec2( margin, offsetY + margin + rect.getY2() );
+			}
 
-			if ( rect.getX2() > app::getWindowWidth() )
-			{
-				offset = vec2( 16.0f, offsetY );
-			}
-			else
-			{
-				offset = rect.getUpperRight() + vec2( 16.0f, 0.0f );
-			}
+			rect.offset( offset );
+			gl::draw( gl::Texture2d::create( *cam.mDepthSurface ), rect );
+			gl::drawString( cam.mName + "-" + cam.mUri, offset + vec2( margin ) );
+
+			offset.x += rect.getWidth() + margin;
 		}
 	}
 }
