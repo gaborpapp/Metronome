@@ -1,6 +1,5 @@
 #include "cinder/Json.h"
 #include "cinder/Log.h"
-#include "cinder/Utilities.h"
 #include "cinder/app/App.h"
 #include "cinder/gl/gl.h"
 
@@ -190,6 +189,8 @@ void OniCameraManager::setupOpenCamera( size_t cameraId )
 
 void OniCameraManager::openOniCameraThreadFn( size_t cameraId )
 {
+	std::lock_guard< std::mutex > lock( mOniCameraOpenMutex );
+
 	if ( cameraId >= mOniCameras.size() )
 	{
 		return;
@@ -270,10 +271,7 @@ void OniCameraManager::readCameraConfig( const ci::DataSourceRef &source )
 			mOniCameras.push_back( oniCam );
 		}
 
-		// TODO: opening devices does not seem to be thread safe, should be
-		// mutexed instead of the sleep
 		setupOpenCamera( cameraId );
-		ci::sleep( 500 );
 	}
 }
 

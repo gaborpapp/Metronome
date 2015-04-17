@@ -64,4 +64,6 @@ class OniCameraManager
 
 	void readCameraConfig( const ci::DataSourceRef &source );
 	void writeCameraConfig( const ci::DataTargetRef &target );
+
+	std::mutex mOniCameraOpenMutex;
 };
