@@ -2,6 +2,7 @@
 
 #include <memory>
 
+#include "cinder/DataSource.h"
 #include "cinder/Surface.h"
 #include "cinder/Thread.h"
 #include "cinder/params/Params.h"
@@ -56,4 +57,10 @@ class OniCameraManager
 	void setupOpenCamera( size_t cameraId );
 	void openOniCameraThreadFn( size_t cameraId );
 	void addCameraParams( size_t cameraId );
+
+	//! Returns id in the mOniCameras vector or 0 if not found.
+	size_t findCameraId( const std::string &uri );
+
+	void readCameraConfig( const ci::DataSourceRef &source );
+	void writeCameraConfig( const ci::DataTargetRef &target );
 };

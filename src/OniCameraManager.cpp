@@ -1,7 +1,9 @@
+#include "cinder/Json.h"
 #include "cinder/Log.h"
 #include "cinder/app/App.h"
 #include "cinder/gl/gl.h"
 
+#include "Config.h"
 #include "OniCameraManager.h"
 
 using namespace ci;
@@ -81,6 +83,32 @@ void OniCameraManager::setupParams()
 	mParams->addButton( "Open camera", [ this ]()
 			{
 				setupOpenCamera( mOniCameraId );
+			} );
+	mParams->addSeparator();
+
+	mParams->addButton( "Load camera config", [ this ]()
+			{
+				fs::path appPath = app::getAppPath();
+#ifdef CINDER_MAC
+				appPath = appPath.parent_path();
+#endif
+				fs::path loadPath = app::getOpenFilePath( appPath, { "json" } );
+				if ( ! loadPath.empty() )
+				{
+					readCameraConfig( loadFile( loadPath ) );
+				}
+			} );
+	mParams->addButton( "Save camera config", [ this ]()
+			{
+				fs::path appPath = app::getAppPath();
+#ifdef CINDER_MAC
+				appPath = appPath.parent_path();
+#endif
+				fs::path savePath = app::getSaveFilePath( appPath, { "json" } );
+				if ( ! savePath.empty() )
+				{
+					writeCameraConfig( writeFile( savePath ) );
+				}
 			} );
 }
 
@@ -189,4 +217,71 @@ void OniCameraManager::openOniCameraThreadFn( size_t cameraId )
 
 	cam.mProgressMessage = "Connected";
 	cam.mCapture->start();
+}
+
+size_t OniCameraManager::findCameraId( const std::string &uri )
+{
+	auto it = std::find_if( mOniCameras.begin(), mOniCameras.end(),
+			[ this, uri ]( const OniCamera &cam )
+			{
+				return cam.mUri == uri;
+			} );
+	if ( it == mOniCameras.end() )
+	{
+		return 0;
+	}
+	else
+	{
+		return it - mOniCameras.begin();
+	}
+}
+
+void OniCameraManager::readCameraConfig( const ci::DataSourceRef &source )
+{
+	JsonTree doc( source );
+
+	mCameraResolutionId = static_cast< CameraResolution >( doc.getValueForKey< int >( "CameraResolution" ) );
+	const JsonTree &cameras = doc[ "Cameras" ];
+	for ( size_t i = 0; i < cameras.getNumChildren(); i++ )
+	{
+		const JsonTree &cameraData = cameras[ i ];
+		std::string name = cameraData.getValueForKey( "name" );
+		std::string uri = cameraData.getValueForKey( "uri" );
+		// FIXME: OpenNI camera id uri is temporary, cannot identify the camera!
+		/*
+		size_t cameraId = findCameraId( uri );
+		if ( ! cameraId )
+		{
+			cameraId = mOniCameras.size();
+			OniCamera oniCam;
+			oniCam.mName = name;
+			oniCam.mUri = uri;
+			mOniCameras.push_back( oniCam );
+		}
+
+		setupOpenCamera( cameraId );
+		*/
+	}
+}
+
+void OniCameraManager::writeCameraConfig( const ci::DataTargetRef &target )
+{
+	JsonTree doc;
+	doc.pushBack( JsonTree( "CameraResolution", static_cast< int >( mCameraResolutionId ) ) );
+
+	JsonTree cameras = JsonTree::makeArray( "Cameras" );
+	for ( const auto &cam : mOniCameras )
+	{
+		if ( ! cam.mCapture )
+		{
+			continue;
+		}
+		JsonTree cameraData = JsonTree::makeObject( "" );
+
+		cameraData.pushBack( JsonTree( "name", cam.mName ) );
+		cameraData.pushBack( JsonTree( "uri", cam.mUri ) );
+		cameras.pushBack( cameraData );
+	}
+	doc.pushBack( cameras );
+	doc.write( target );
 }
