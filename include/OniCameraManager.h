@@ -44,6 +44,7 @@ class OniCameraManager
 	{
 		std::string mName;
 		std::string mUri;
+		std::string mSerial;
 
 		std::string mProgressMessage;
 		mndl::oni::OniCaptureRef mCapture;
@@ -58,8 +59,8 @@ class OniCameraManager
 	void openOniCameraThreadFn( size_t cameraId );
 	void addCameraParams( size_t cameraId );
 
-	//! Returns id in the mOniCameras vector or 0 if not found.
-	size_t findCameraId( const std::string &uri );
+	//! Returns id according to the \a serial number in the mOniCameras vector or 0 if not found.
+	size_t findCameraId( const std::string &serial );
 
 	void readCameraConfig( const ci::DataSourceRef &source );
 	void writeCameraConfig( const ci::DataTargetRef &target );

@@ -1,5 +1,6 @@
 #include "cinder/Json.h"
 #include "cinder/Log.h"
+#include "cinder/Utilities.h"
 #include "cinder/app/App.h"
 #include "cinder/gl/gl.h"
 
@@ -44,15 +45,25 @@ void OniCameraManager::setupCameras()
 	openni::Array< openni::DeviceInfo > deviceInfoList;
 	openni::OpenNI::enumerateDevices( &deviceInfoList );
 	mOniCameras.push_back( OniCamera() ); // blank camera for option menu
+
+	openni::Device device;
 	for ( int i = 0; i < deviceInfoList.getSize(); i++ )
 	{
 		const auto &di = deviceInfoList[ i ];
+
 		OniCamera oniCam;
 		oniCam.mName = di.getName();
 		oniCam.mUri = di.getUri();
+
+		device.open( oniCam.mUri.c_str() );
+		char serial[ 256 ];
+		device.getProperty( ONI_DEVICE_PROPERTY_SERIAL_NUMBER, &serial );
+		device.close();
+		oniCam.mSerial = serial;
+
 		mOniCameras.push_back( oniCam );
 
-		CI_LOG_I( oniCam.mName << " " << oniCam.mUri );
+		CI_LOG_I( oniCam.mName << " " << oniCam.mUri << " " << oniCam.mSerial );
 	}
 }
 
@@ -219,12 +230,12 @@ void OniCameraManager::openOniCameraThreadFn( size_t cameraId )
 	cam.mCapture->start();
 }
 
-size_t OniCameraManager::findCameraId( const std::string &uri )
+size_t OniCameraManager::findCameraId( const std::string &serial )
 {
 	auto it = std::find_if( mOniCameras.begin(), mOniCameras.end(),
-			[ this, uri ]( const OniCamera &cam )
+			[ this, serial ]( const OniCamera &cam )
 			{
-				return cam.mUri == uri;
+				return cam.mSerial == serial;
 			} );
 	if ( it == mOniCameras.end() )
 	{
@@ -247,20 +258,22 @@ void OniCameraManager::readCameraConfig( const ci::DataSourceRef &source )
 		const JsonTree &cameraData = cameras[ i ];
 		std::string name = cameraData.getValueForKey( "name" );
 		std::string uri = cameraData.getValueForKey( "uri" );
-		// FIXME: OpenNI camera id uri is temporary, cannot identify the camera!
-		/*
-		size_t cameraId = findCameraId( uri );
+		std::string serial = cameraData.getValueForKey( "serial" );
+		size_t cameraId = findCameraId( serial );
 		if ( ! cameraId )
 		{
 			cameraId = mOniCameras.size();
 			OniCamera oniCam;
 			oniCam.mName = name;
 			oniCam.mUri = uri;
+			oniCam.mSerial = serial;
 			mOniCameras.push_back( oniCam );
 		}
 
+		// TODO: opening devices does not seem to be thread safe, should be
+		// mutexed instead of the sleep
 		setupOpenCamera( cameraId );
-		*/
+		ci::sleep( 500 );
 	}
 }
 
@@ -280,6 +293,7 @@ void OniCameraManager::writeCameraConfig( const ci::DataTargetRef &target )
 
 		cameraData.pushBack( JsonTree( "name", cam.mName ) );
 		cameraData.pushBack( JsonTree( "uri", cam.mUri ) );
+		cameraData.pushBack( JsonTree( "serial", cam.mSerial ) );
 		cameras.pushBack( cameraData );
 	}
 	doc.pushBack( cameras );
