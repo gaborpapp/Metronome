@@ -20,12 +20,12 @@ using namespace std;
 class MetronomeApp : public App
 {
  public:
-    void setup() override;
+	void setup() override;
 	void draw() override;
 	void update() override;
 
 	void keyDown( KeyEvent event ) override;
-    void mouseDrag( MouseEvent event ) override;
+	void mouseDrag( MouseEvent event ) override;
 
 	void cleanup() override;
 
@@ -38,9 +38,9 @@ class MetronomeApp : public App
 	void setupSerial();
 	Serial mSerial;
 
-    ivec2 controlpos;
-    ChannelView channelView;
-    
+	ivec2 mControlPos;
+	ChannelView mChannelView;
+
 	OniCameraManagerRef mOniCameraManager;
 
 	void readConfig();
@@ -49,18 +49,17 @@ class MetronomeApp : public App
 
 void MetronomeApp::setup()
 {
-    
 	GlobalData &gd = GlobalData::get();
 	gd.mConfig = mndl::Config::create();
-    gd.gridSize = 18;
-    
+	gd.gridSize = 18;
+
 	setupParams();
 
 	mOniCameraManager = OniCameraManager::create();
 
 	setupSerial();
-    
-    channelView.setup();
+
+	mChannelView.setup();
 
 	readConfig();
 	mndl::params::showAllParams( true );
@@ -86,14 +85,13 @@ void MetronomeApp::update()
 	mFps = getAverageFps();
 
 	mOniCameraManager->update();
-    
-    // blob positions with grid coordinates
-    vector<ivec2> blobCenters;
-    
-    blobCenters.push_back(ivec2( 0, 0 ));
-    //blobCenters.push_back(ivec2( 9, 0 ));
-    
-    channelView.update( blobCenters );
+
+	// blob positions with grid coordinates
+	vector<ivec2> blobCenters;
+	blobCenters.push_back(ivec2( 0, 0 ));
+	//blobCenters.push_back(ivec2( 9, 0 ));
+
+	channelView.update( blobCenters );
 }
 
 void MetronomeApp::draw()
@@ -103,18 +101,17 @@ void MetronomeApp::draw()
 
 	gl::clear( Color( 0.4, 0.4, 0.4 ), true );
 
-    channelView.draw();
-    
+	mChannelView.draw();
+
 	mOniCameraManager->draw();
 
 	mParams->draw();
-    
-    
 }
 
-void MetronomeApp::mouseDrag(MouseEvent event) {
+void MetronomeApp::mouseDrag( MouseEvent event )
+{
 	const vec2 scale( 10 );
-	controlpos = vec2( event.getPos() ) / vec2( getWindowSize() ) * scale;
+	mControlPos = vec2( event.getPos() ) / vec2( getWindowSize() ) * scale;
 }
 
 void MetronomeApp::keyDown( KeyEvent event )
@@ -155,11 +152,11 @@ void MetronomeApp::keyDown( KeyEvent event )
 				}
 			}
 			break;
-        
-        case KeyEvent::KEY_SPACE:
-            cout << channelView.getResult() << endl;
-            //  cout << channelView.getRoundedChannelPixels() << endl;
-            break;
+
+		case KeyEvent::KEY_SPACE:
+			cout << channelView.getResult() << endl;
+			//  cout << channelView.getRoundedChannelPixels() << endl;
+			break;
 
 		case KeyEvent::KEY_ESCAPE:
 			quit();
