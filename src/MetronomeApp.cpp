@@ -34,7 +34,6 @@ class MetronomeApp : public App
 
  private:
 	params::InterfaceGlRef mParams;
-    
 
 	float mFps;
 
@@ -45,8 +44,9 @@ class MetronomeApp : public App
 	ivec2 mControlPos;
 	ChannelView mChannelView;
 
-    Sound mSound;
-    
+	Sound mSound;
+	bool mSoundEnabled;
+
 	OniCameraManagerRef mOniCameraManager;
 
 	void readConfig();
@@ -66,20 +66,33 @@ void MetronomeApp::setup()
 	setupSerial();
 
 	mChannelView.setup();
-    
-    
-    auto ctx = audio::master();
-    mSound.setup(*ctx);
-    ctx->enable();
+
+	auto ctx = audio::master();
+	mSound.setup(*ctx);
 
 	readConfig();
 	mndl::params::showAllParams( true );
+
+	if ( mSoundEnabled )
+	{
+		ctx->enable();
+	}
 }
 
 void MetronomeApp::setupParams()
 {
 	mParams = params::InterfaceGl::create( "Parameters", ivec2( 200, 300 ) );
 	mParams->addParam( "Fps", &mFps, true );
+	mParams->addSeparator();
+
+	mParams->addParam( "Sound enable", &mSoundEnabled ).updateFn(
+			[ this ]()
+			{
+				audio::master()->setEnabled( mSoundEnabled );
+			} );
+
+	GlobalData &gd = GlobalData::get();
+	gd.mConfig->addVar( "Sound/Enable", &mSoundEnabled, false );
 }
 
 void MetronomeApp::setupSerial()
