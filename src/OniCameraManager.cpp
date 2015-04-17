@@ -75,24 +75,12 @@ void OniCameraManager::setupParams()
 	}
 
 	mParams->addParam( "Camera", cameraNames, &mOniCameraId );
+	mParams->addParam( "Camera resolution", { "320x240", "640x480" },
+						reinterpret_cast< int * >( &mCameraResolutionId ) );
+
 	mParams->addButton( "Open camera", [ this ]()
 			{
-				if ( ( mOniCameraId > 0 ) && ( mOniCameraId < mOniCameras.size() ) )
-				{
-					auto &cam = mOniCameras[ mOniCameraId ];
-					if ( cam.mOpenThread )
-					{
-						cam.mOpenThread->join();
-						cam.mOpenThread.reset();
-					}
-
-					app::AppBase::get()->dispatchAsync(
-						std::bind( &OniCameraManager::addCameraParams, this, mOniCameraId ) );
-
-					cam.mOpenThread =
-						std::shared_ptr< std::thread >( new std::thread(
-							std::bind( &OniCameraManager::openOniCamera, this, mOniCameraId ) ) );
-				}
+				setupOpenCamera( mOniCameraId );
 			} );
 }
 
@@ -141,7 +129,27 @@ void OniCameraManager::addCameraParams( size_t cameraId )
 	mParams->addParam( name + " progress", &cam.mProgressMessage, true ).group( name );
 }
 
-void OniCameraManager::openOniCamera( size_t cameraId )
+void OniCameraManager::setupOpenCamera( size_t cameraId )
+{
+	if ( ( cameraId > 0 ) && ( cameraId < mOniCameras.size() ) )
+	{
+		auto &cam = mOniCameras[ cameraId ];
+		if ( cam.mOpenThread )
+		{
+			cam.mOpenThread->join();
+			cam.mOpenThread.reset();
+		}
+
+		app::AppBase::get()->dispatchAsync(
+			std::bind( &OniCameraManager::addCameraParams, this, cameraId ) );
+
+		cam.mOpenThread =
+			std::shared_ptr< std::thread >( new std::thread(
+				std::bind( &OniCameraManager::openOniCameraThreadFn, this, cameraId ) ) );
+	}
+}
+
+void OniCameraManager::openOniCameraThreadFn( size_t cameraId )
 {
 	if ( cameraId >= mOniCameras.size() )
 	{
@@ -173,7 +181,8 @@ void OniCameraManager::openOniCamera( size_t cameraId )
 	}
 
 	openni::VideoMode depthMode;
-	depthMode.setResolution( 640, 480 );
+	ivec2 res = mCameraResolutions[ static_cast< int >( mCameraResolutionId ) ];
+	depthMode.setResolution( res.x, res.y );
 	depthMode.setFps( 30 );
 	depthMode.setPixelFormat( openni::PIXEL_FORMAT_DEPTH_1_MM );
 	cam.mCapture->getDepthStreamRef()->setVideoMode( depthMode );

@@ -29,6 +29,16 @@ class OniCameraManager
 
 	int mOniCameraId = 0;
 
+	enum class CameraResolution : int
+	{
+		RES_320x240 = 0,
+		RES_640x480
+	};
+	CameraResolution mCameraResolutionId = CameraResolution::RES_320x240;
+
+	std::vector< ci::ivec2 > mCameraResolutions =
+		{ ci::ivec2( 320, 240 ), ci::ivec2( 640, 480 ) };
+
 	struct OniCamera
 	{
 		std::string mName;
@@ -43,6 +53,7 @@ class OniCameraManager
 
 	std::vector< OniCamera > mOniCameras;
 
-	void openOniCamera( size_t cameraId );
+	void setupOpenCamera( size_t cameraId );
+	void openOniCameraThreadFn( size_t cameraId );
 	void addCameraParams( size_t cameraId );
 };
