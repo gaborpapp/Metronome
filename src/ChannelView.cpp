@@ -16,6 +16,13 @@ void ChannelView::setup() {
     transparentArea( &customSurface, Area( 0, 0, customSurface.getWidth(), customSurface.getHeight() ) );
     
     //manipulateChannel( &baseChannel, Area( 0, 0, baseChannel.getWidth(), baseChannel.getHeight() ) );
+    
+    GlobalData &gd = GlobalData::get();
+    mParams = params::InterfaceGl::create("BPM", ivec2(100,400));
+    for( size_t i = 0; i < mBpmValues.size(); i++) {
+        mParams->addParam( "Bpm #" + to_string(i), &mBpmValues[i]).min( 5 ).max( 220 );
+        gd.mConfig->addVar( "ChannelView/Bpm" + to_string(i), &mBpmValues[i], 60 );
+    }
 }
 
 void ChannelView::update( const vector<ivec2> &cps ) {

@@ -6,7 +6,7 @@
 #include "cinder/ImageIo.h"
 #include "cinder/gl/gl.h"
 #include "cinder/Rand.h"
-
+#include "cinder/params/Params.h"
 #include "Resources.h"
 
 class ChannelView {
@@ -36,4 +36,8 @@ public:
     void manipulateChannel( ci::Channel32f *channel, ci::Area area );
     
     float remap(float val, float inMin, float inMax, float outMin, float outMax);
+    
+    ci::params::InterfaceGlRef mParams;
+    
+    std::vector< int > mBpmValues = { 5, 10, 20, 25 }; // TODO: fill with real values later
 };

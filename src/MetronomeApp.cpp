@@ -13,6 +13,9 @@
 #include "ChannelView.h"
 #include "ParamsUtils.h"
 
+#include "cinder/audio/Context.h"
+#include "Sound.h"
+
 using namespace ci;
 using namespace ci::app;
 using namespace std;
@@ -31,6 +34,7 @@ class MetronomeApp : public App
 
  private:
 	params::InterfaceGlRef mParams;
+    
 
 	float mFps;
 
@@ -41,6 +45,8 @@ class MetronomeApp : public App
 	ivec2 mControlPos;
 	ChannelView mChannelView;
 
+    Sound mSound;
+    
 	OniCameraManagerRef mOniCameraManager;
 
 	void readConfig();
@@ -60,6 +66,11 @@ void MetronomeApp::setup()
 	setupSerial();
 
 	mChannelView.setup();
+    
+    
+    auto ctx = audio::master();
+    mSound.setup(*ctx);
+    ctx->enable();
 
 	readConfig();
 	mndl::params::showAllParams( true );
@@ -86,12 +97,13 @@ void MetronomeApp::update()
 
 	mOniCameraManager->update();
 
-	// blob positions with grid coordinates
+    // blob positions with grid coordinates
 	vector<ivec2> blobCenters;
 	blobCenters.push_back(ivec2( 0, 0 ));
 	//blobCenters.push_back(ivec2( 9, 0 ));
 
 	mChannelView.update( blobCenters );
+    mSound.update();
 }
 
 void MetronomeApp::draw()
