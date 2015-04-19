@@ -318,6 +318,8 @@ void MetronomeApp::updateTracking()
 	}
 
 	mBlobTracker->update( *mTrackerChannel );
+
+	mCellDetector->update( mBlobTracker->getBlobs() );
 }
 
 void MetronomeApp::draw()
@@ -332,7 +334,10 @@ void MetronomeApp::draw()
 	drawTracking();
 
 	mOniCameraManager->draw();
-    
+
+	Rectf outputRect = Rectf( mTrackerChannel->getBounds() ).getCenteredFit( getWindowBounds(), true );
+	mCellDetector->draw( outputRect );
+
     displayCells( mChannelView.getResult() );
 
 	mParams->draw();
