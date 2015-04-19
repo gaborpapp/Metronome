@@ -171,8 +171,8 @@ void MetronomeApp::setupParamsTracking()
 	mParamsTracking->addParam( "Threshold", &mBlobTrackerOptions.mThreshold ).min( 0 ).max( 255 );
 	mParamsTracking->addParam( "Threshold inverts", &mBlobTrackerOptions.mThresholdInvertEnabled );
 	mParamsTracking->addParam( "Blur size", &mBlobTrackerOptions.mBlurSize ).min( 1 ).max( 15 );
-	mParamsTracking->addParam( "Min area", &mBlobTrackerOptions.mMinArea ).min( 0.f ).max( 1.f ).step( 0.0001f );
-	mParamsTracking->addParam( "Max area", &mBlobTrackerOptions.mMaxArea ).min( 0.f ).max( 1.f ).step( 0.001f );
+	mParamsTracking->addParam( "Min area", &mBlobTrackerOptions.mMinArea ).min( 0.0f ).max( 1.0f ).step( 0.0001f );
+	mParamsTracking->addParam( "Max area", &mBlobTrackerOptions.mMaxArea ).min( 0.0f ).max( 1.0f ).step( 0.001f );
 	mParamsTracking->addParam( "Bounds", &mBlobTrackerOptions.mBoundsEnabled );
 	mParamsTracking->addParam( "Top left x", &mBlobTrackerOptions.mNormalizedRegionOfInterest.x1 )
 		.min( 0.f ).max( 1.f ).step( 0.001f ).group( "Region of Interest" );
