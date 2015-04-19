@@ -146,6 +146,9 @@ void OniCameraManager::setupParams()
 					writeCameraConfig( writeFile( savePath ) );
 				}
 			} );
+	mParams->addSeparator();
+
+	mParams->addParam( "Camera debug", &mDebugDraw );
 }
 
 void OniCameraManager::update()
@@ -161,6 +164,11 @@ void OniCameraManager::update()
 
 void OniCameraManager::draw()
 {
+	if ( ! mDebugDraw )
+	{
+		return;
+	}
+
 	const float margin = 16.0f;
 	vec2 offset( margin );
 	float offsetY = margin;

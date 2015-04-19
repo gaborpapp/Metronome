@@ -71,4 +71,6 @@ class OniCameraManager
 	void writeCameraConfig( const ci::DataTargetRef &target );
 
 	std::mutex mOniCameraOpenMutex;
+
+	bool mDebugDraw = false;
 };

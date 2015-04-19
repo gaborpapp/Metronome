@@ -276,7 +276,8 @@ void MetronomeApp::draw()
 	mChannelView.draw();
 
 	drawTracking();
-	//mOniCameraManager->draw();
+
+	mOniCameraManager->draw();
 
 	mParams->draw();
 }
@@ -285,6 +286,21 @@ void MetronomeApp::drawTracking()
 {
 	Rectf outputRect = Rectf( mTrackerChannel->getBounds() ).getCenteredFit( getWindowBounds(), true );
 	gl::draw( gl::Texture2d::create( *mTrackerChannel ), outputRect );
+
+	RectMapping mapping( mTrackerChannel->getBounds(), outputRect );
+	size_t numCameras = math< size_t >::min( kNumCameras, mOniCameraManager->getNumCameras() );
+	for ( size_t i = 0; i < numCameras; i++ )
+	{
+		const ivec2 margin( 16 );
+		ChannelRef camChannel = mOniCameraManager->getCameraChannel( i );
+		if ( camChannel )
+		{
+			std::string label = mOniCameraManager->getCameraLabel( i );
+			ivec2 offset = mCameraData[ i ].mSrcArea.getUL() +
+							mCameraData[ i ].mOffset + margin;
+			gl::drawString( label, mapping.map( offset ) );
+		}
+	}
 }
 
 void MetronomeApp::mouseMove( MouseEvent event )
