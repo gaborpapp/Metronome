@@ -62,10 +62,11 @@ void OniCameraManager::setupCameras()
 		device.getProperty( ONI_DEVICE_PROPERTY_SERIAL_NUMBER, &serial );
 		device.close();
 		oniCam.mSerial = serial;
+		oniCam.mLabel = oniCam.mName + "-" + oniCam.mSerial;
 
 		mOniCameras.push_back( oniCam );
 
-		CI_LOG_I( oniCam.mName << " " << oniCam.mUri << " " << oniCam.mSerial );
+		CI_LOG_I( oniCam.mLabel << " " << oniCam.mUri );
 	}
 
 	// sorting cameras by serial number retains order
@@ -74,6 +75,21 @@ void OniCameraManager::setupCameras()
 			{
 				return cam0.mSerial < cam1.mSerial;
 			} );
+}
+
+size_t OniCameraManager::getNumCameras()
+{
+	return mOniCameras.size() - 1;
+}
+
+Surface16uRef OniCameraManager::getCameraSurface( size_t i )
+{
+	return mOniCameras[ i + 1 ].mDepthSurface;
+}
+
+std::string OniCameraManager::getCameraLabel( size_t i )
+{
+	return mOniCameras[ i + 1 ].mLabel;
 }
 
 void OniCameraManager::setupParams()
@@ -89,7 +105,7 @@ void OniCameraManager::setupParams()
 		{
 			continue;
 		}
-		cameraNames.push_back( c.mName + "-" + c.mSerial );
+		cameraNames.push_back( c.mLabel );
 	}
 	if ( cameraNames.size() == 1 )
 	{
@@ -161,7 +177,7 @@ void OniCameraManager::draw()
 
 			rect.offset( offset );
 			gl::draw( gl::Texture2d::create( *cam.mDepthSurface ), rect );
-			gl::drawString( cam.mName + "-" + cam.mSerial, offset + vec2( margin ) );
+			gl::drawString( cam.mLabel, offset + vec2( margin ) );
 
 			offset.x += rect.getWidth() + margin;
 		}
@@ -171,7 +187,7 @@ void OniCameraManager::draw()
 void OniCameraManager::addCameraParams( size_t cameraId )
 {
 	auto &cam = mOniCameras[ cameraId ];
-	auto name = cam.mName + "-" + cam.mSerial;
+	auto name = cam.mLabel;
 	auto sepName = name + "-sep";
 	mParams->addSeparator( sepName );
 	mParams->addParam( name + " progress", &cam.mProgressMessage, true ).group( name );

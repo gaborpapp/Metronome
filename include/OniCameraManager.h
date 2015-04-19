@@ -20,6 +20,10 @@ class OniCameraManager
 	void update();
 	void draw();
 
+	size_t getNumCameras();
+	ci::Surface16uRef getCameraSurface( size_t i );
+	std::string getCameraLabel( size_t i );
+
  protected:
 	OniCameraManager();
 
@@ -45,6 +49,7 @@ class OniCameraManager
 		std::string mName;
 		std::string mUri;
 		std::string mSerial;
+		std::string mLabel; // unique label created from name and serial
 
 		std::string mProgressMessage;
 		mndl::oni::OniCaptureRef mCapture;
