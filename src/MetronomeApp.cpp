@@ -393,7 +393,9 @@ void MetronomeApp::displayCells( string result )
 		for ( int x = 0; x < gd.mGridSize; x++ )
 		{
 			vec2 cellCenter = mCellDetector->getCellCenter( ivec2( x, y ) );
-			gl::drawStringCentered( toString( x ) + ", " + toString( y ), cellCenter );
+			std::string label = toString( x ) + ", " + toString( y );
+			vec2 labelSize = mTextureFont->measureString( label );
+			mTextureFont->drawString( label, cellCenter - labelSize * 0.5f );
 		}
 	}
 }
