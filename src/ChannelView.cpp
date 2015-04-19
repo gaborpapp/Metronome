@@ -66,7 +66,7 @@ void ChannelView::draw() {
         /*
         //  map values between 0 - 1 for displaying
         GlobalData &gd = GlobalData::get();
-        vec2 mapPt = vec2( remap( p.x, 0, gd.gridSize, 0, 1 ), remap( p.y, 0, gd.gridSize, 0, 1 ) );
+        vec2 mapPt = vec2( remap( p.x, 0, gd.mGridSize, 0, 1 ), remap( p.y, 0, gd.mGridSize, 0, 1 ) );
         
         Area cRect( ( offset.x + mapPt.x * bRect.getWidth() ) , ( offset.y + mapPt.y * bRect.getHeight() ) ,
                     //( offset.x + mapPt.x * bRect.getWidth() ) + customChannel.getWidth() * size,     ( offset.y + mapPt.y * bRect.getHeight() ) + customChannel.getHeight() * size );

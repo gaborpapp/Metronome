@@ -99,7 +99,6 @@ void MetronomeApp::setup()
 {
 	GlobalData &gd = GlobalData::get();
 	gd.mConfig = mndl::Config::create();
-	gd.gridSize = 18;
 
 	mBlobTracker = mndl::blobtracker::BlobTracker::create( mBlobTrackerOptions );
 
@@ -126,18 +125,25 @@ void MetronomeApp::setup()
 
 void MetronomeApp::setupParams()
 {
+	GlobalData &gd = GlobalData::get();
+
 	mParams = params::InterfaceGl::create( "Parameters", ivec2( 200, 300 ) );
 	mParams->addParam( "Fps", &mFps, true );
 	mParams->addSeparator();
 
+	mParams->addText( "Metronome grid" );
+	mParams->addParam( "Grid size", &gd.mGridSize );
+	mParams->addSeparator();
+
+	mParams->addText( "Simulation" );
 	mParams->addParam( "Sound enable", &mSoundEnabled ).updateFn(
 			[ this ]()
 			{
 				audio::master()->setEnabled( mSoundEnabled );
 			} );
 
-	GlobalData &gd = GlobalData::get();
 	gd.mConfig->addVar( "Sound.Enable", &mSoundEnabled, false );
+	gd.mConfig->addVar( "GridSize", &gd.mGridSize, 10 );
 }
 
 void MetronomeApp::setupParamsTracking()

@@ -10,7 +10,6 @@ class GlobalData
  public:
 	static GlobalData& get() { static GlobalData data; return data; }
     mndl::ConfigRef mConfig;
-    
-    int gridSize;
-    
+
+    int mGridSize;
 };
