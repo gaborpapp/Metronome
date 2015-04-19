@@ -317,6 +317,9 @@ void MetronomeApp::updateTracking()
 
 	mBlobTracker->update( *mTrackerChannel );
 
+	Rectf outputRect = Rectf( mTrackerChannel->getBounds() ).getCenteredFit( getWindowBounds(), true );
+	mCellDetector->resize( outputRect );
+
 	mCellDetector->update( mBlobTracker->getBlobs() );
 }
 
@@ -333,8 +336,7 @@ void MetronomeApp::draw()
 
 	mOniCameraManager->draw();
 
-	Rectf outputRect = Rectf( mTrackerChannel->getBounds() ).getCenteredFit( getWindowBounds(), true );
-	mCellDetector->draw( outputRect );
+	mCellDetector->draw();
 
     displayCells( mChannelView.getResult() );
 
@@ -383,6 +385,17 @@ void MetronomeApp::displayCells( string result )
 {
     gl::color( Color::white() );
     mTextureFont->drawString( result, ivec2( getWindowWidth() / 2, getWindowHeight() / 2 ) );
+
+	// TODO: use something like this instead to display the result
+	const GlobalData &gd = GlobalData::get();
+	for ( int y = 0; y < gd.mGridSize; y++ )
+	{
+		for ( int x = 0; x < gd.mGridSize; x++ )
+		{
+			vec2 cellCenter = mCellDetector->getCellCenter( ivec2( x, y ) );
+			gl::drawStringCentered( toString( x ) + ", " + toString( y ), cellCenter );
+		}
+	}
 }
 
 void MetronomeApp::keyDown( KeyEvent event )

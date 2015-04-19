@@ -14,11 +14,15 @@ class CellDetector
  public:
 	static CellDetectorRef create() { return CellDetectorRef( new CellDetector() ); }
 
+	void resize( const ci::Rectf &bounds );
+
 	void update( const std::vector< mndl::blobtracker::BlobRef > &blobs );
-	void draw( const ci::Rectf &bounds );
+	void draw();
 
 	// Returns blobs cell coordinates in grid.
 	const std::vector< ci::ivec2 > & getBlobCellCoords() const { return mBlobCellCoords; }
+
+	ci::vec2 getCellCenter( const ci::ivec2 &cellPos );
 
  protected:
 	CellDetector();
@@ -28,6 +32,7 @@ class CellDetector
 	void setupParams();
 
 	ci::Rectf mNormalizedGridArea;
+	ci::RectMapping mNormalizedToScreenMapping;
 
 	void calcGridCells();
 	std::vector< std::vector< ci::Rectf > > mGridCells;

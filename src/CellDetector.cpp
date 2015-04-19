@@ -36,6 +36,11 @@ void CellDetector::setupParams()
 	gd.mConfig->addVar( "CellDetector.Grid.Area.y2", &mNormalizedGridArea.y2, 1.0f );
 }
 
+void CellDetector::resize( const Rectf &bounds )
+{
+	mNormalizedToScreenMapping = RectMapping( Rectf( vec2( 0.0f ), vec2( 1.0f ) ), bounds );
+}
+
 void CellDetector::update( const std::vector< mndl::blobtracker::BlobRef > &blobs )
 {
 	const GlobalData &gd = GlobalData::get();
@@ -62,17 +67,15 @@ void CellDetector::update( const std::vector< mndl::blobtracker::BlobRef > &blob
 	}
 }
 
-void CellDetector::draw( const Rectf &bounds )
+void CellDetector::draw()
 {
 	gl::ScopedAlphaBlend blending( false );
-
-	RectMapping mapping( Rectf( vec2( 0.0f ), vec2( 1.0f ) ), bounds );
 
 	for ( const auto &gridRow : mGridCells )
 	{
 		for ( const auto &cellRect : gridRow )
 		{
-			Rectf mappedRect = mapping.map( cellRect );
+			Rectf mappedRect = mNormalizedToScreenMapping.map( cellRect );
 			gl::drawStrokedRect( mappedRect );
 		}
 	}
@@ -82,7 +85,7 @@ void CellDetector::draw( const Rectf &bounds )
 	{
 		Rectf cellRect = mGridCells[ coord.y ][ coord.x ];
 		cellRect.inflate( vec2( -0.02f ) );
-		Rectf mappedRect = mapping.map( cellRect );
+		Rectf mappedRect = mNormalizedToScreenMapping.map( cellRect );
 		gl::drawSolidRect( mappedRect );
 	}
 }
@@ -108,4 +111,9 @@ void CellDetector::calcGridCells()
 		}
 		mGridCells.emplace_back( gridRow );
 	}
+}
+
+vec2 CellDetector::getCellCenter( const ivec2 &cellPos )
+{
+	return mNormalizedToScreenMapping.map( mGridCells[ cellPos.y ][ cellPos. x ].getCenter() );
 }
