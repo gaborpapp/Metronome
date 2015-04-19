@@ -54,13 +54,14 @@ class MetronomeApp : public App
 	void readConfig();
 	void writeConfig();
 
-	const int kNumCameras = 4;
+	static const int kNumCameras = 4;
 	struct CameraData
 	{
 		Area mSrcArea;
-		ivec2 mRelativeOffset;
+		ivec2 mOffset;
 	};
 	ivec2 mTrackingResolution;
+	CameraData mCameraData[ kNumCameras ];
 };
 
 void MetronomeApp::setup()
@@ -111,6 +112,39 @@ void MetronomeApp::setupParamsTracking()
 	GlobalData &gd = GlobalData::get();
 	mParamsTracking = params::InterfaceGl::create( "Tracking", ivec2( 200, 300 ) );
 	mParamsTracking->setPosition( ivec2( 548, 16 ) );
+
+	mParamsTracking->addText( "Arrangement" );
+	const std::string resolutionGroup = "Resolution";
+	mParamsTracking->addParam( "Resolution X", &mTrackingResolution.x ).min( 320 ).group( resolutionGroup );
+	mParamsTracking->addParam( "Resolution Y", &mTrackingResolution.y ).min( 240 ).group( resolutionGroup );
+	mParamsTracking->setOptions( resolutionGroup, " opened=false " );
+
+	for ( size_t i = 0; i < kNumCameras; i++ )
+	{
+		std::string groupName = "Camera #" + toString( i );
+		std::string areaGroup = groupName + " area #" + toString( i );
+		mParamsTracking->addParam( groupName + " X1", &mCameraData[ i ].mSrcArea.x1 ).min( 0 ).group( areaGroup );
+		mParamsTracking->addParam( groupName + " Y1", &mCameraData[ i ].mSrcArea.y1 ).min( 0 ).group( areaGroup );
+		mParamsTracking->addParam( groupName + " X2", &mCameraData[ i ].mSrcArea.x2 ).min( 0 ).group( areaGroup );
+		mParamsTracking->addParam( groupName + " Y2", &mCameraData[ i ].mSrcArea.y2 ).min( 0 ).group( areaGroup );
+		std::string offsetGroup = groupName + " offset #" + toString( i );
+		mParamsTracking->addParam( groupName + " offset X", &mCameraData[ i ].mOffset.x ).min( 0 ).group( offsetGroup );
+		mParamsTracking->addParam( groupName + " offset Y", &mCameraData[ i ].mOffset.y ).min( 0 ).group( offsetGroup );
+		mParamsTracking->setOptions( areaGroup, "group='" + groupName + "'" + " opened=false " );
+		mParamsTracking->setOptions( offsetGroup, "group='" + groupName + "'" + " opened=false " );
+		mParamsTracking->setOptions( groupName, " opened=false " );
+
+		std::string srcAreaCfg = "Tracking.Camera" + toString( i ) + ".SrcArea.";
+		gd.mConfig->addVar( srcAreaCfg + "x1", &mCameraData[ i ].mSrcArea.x1, 0 );
+		gd.mConfig->addVar( srcAreaCfg + "y1", &mCameraData[ i ].mSrcArea.y1, 0 );
+		gd.mConfig->addVar( srcAreaCfg + "x2", &mCameraData[ i ].mSrcArea.x2, 320 );
+		gd.mConfig->addVar( srcAreaCfg + "y2", &mCameraData[ i ].mSrcArea.y2, 240 );
+		std::string srcOffsetCfg = "Tracking.Camera" + toString( i );
+		gd.mConfig->addVar( srcOffsetCfg, &mCameraData[ i ].mOffset,
+				ivec2( ( i & 1 ) * 320, ( i / 2 ) * 240 ) );
+	}
+
+	gd.mConfig->addVar( "Tracking.Resolution", &mTrackingResolution, ivec2( 640, 480 ) );
 }
 
 void MetronomeApp::setupSerial()
