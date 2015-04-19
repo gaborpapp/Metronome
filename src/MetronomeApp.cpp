@@ -134,6 +134,8 @@ void MetronomeApp::setup()
 	{
 		ctx->enable();
 	}
+
+	mOniCameraManager->startup();
 }
 
 void MetronomeApp::setupParams()

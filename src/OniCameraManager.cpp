@@ -1,5 +1,6 @@
 #include <algorithm>
 
+#include "cinder/Filesystem.h"
 #include "cinder/Json.h"
 #include "cinder/Log.h"
 #include "cinder/Utilities.h"
@@ -7,6 +8,7 @@
 #include "cinder/gl/gl.h"
 
 #include "Config.h"
+#include "GlobalData.h"
 #include "OniCameraManager.h"
 
 using namespace ci;
@@ -77,6 +79,18 @@ void OniCameraManager::setupCameras()
 			} );
 }
 
+void OniCameraManager::startup()
+{
+	if ( mLoadCameraConfigAtStart )
+	{
+		fs::path loadPath( mLastCameraConfig );
+		if ( fs::exists( loadPath ) )
+		{
+			readCameraConfig( loadFile( loadPath ) );
+		}
+	}
+}
+
 size_t OniCameraManager::getNumCameras()
 {
 	return mOniCameras.size() - 1;
@@ -131,6 +145,7 @@ void OniCameraManager::setupParams()
 				fs::path loadPath = app::getOpenFilePath( appPath, { "json" } );
 				if ( ! loadPath.empty() )
 				{
+					mLastCameraConfig = loadPath.string();
 					readCameraConfig( loadFile( loadPath ) );
 				}
 			} );
@@ -146,9 +161,14 @@ void OniCameraManager::setupParams()
 					writeCameraConfig( writeFile( savePath ) );
 				}
 			} );
+	mParams->addParam( "Load config at startup", &mLoadCameraConfigAtStart );
 	mParams->addSeparator();
 
 	mParams->addParam( "Camera debug", &mDebugDraw );
+
+	GlobalData &gd = GlobalData::get();
+	gd.mConfig->addVar( "CameraManager.ConfigPath", &mLastCameraConfig, "" );
+	gd.mConfig->addVar( "CameraManager.LoadAtStartup", &mLoadCameraConfigAtStart, false );
 }
 
 void OniCameraManager::update()

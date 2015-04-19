@@ -17,6 +17,8 @@ class OniCameraManager
 	static OniCameraManagerRef create() { return OniCameraManagerRef( new OniCameraManager() ); }
 	~OniCameraManager();
 
+	void startup();
+
 	void update();
 	void draw();
 
@@ -73,4 +75,7 @@ class OniCameraManager
 	std::mutex mOniCameraOpenMutex;
 
 	bool mDebugDraw = false;
+
+	std::string mLastCameraConfig;
+	bool mLoadCameraConfigAtStart = false;
 };
