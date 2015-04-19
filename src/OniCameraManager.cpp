@@ -260,6 +260,7 @@ void OniCameraManager::openOniCameraThreadFn( size_t cameraId )
 	depthMode.setFps( 30 );
 	depthMode.setPixelFormat( openni::PIXEL_FORMAT_DEPTH_1_MM );
 	cam.mCapture->getDepthStreamRef()->setVideoMode( depthMode );
+	cam.mCapture->invertDepth();
 
 	cam.mProgressMessage = "Connected";
 	cam.mCapture->start();

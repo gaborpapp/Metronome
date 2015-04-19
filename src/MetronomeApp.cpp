@@ -264,6 +264,8 @@ void MetronomeApp::updateTracking()
 			mTrackerChannel->copyFrom( *camChannel, srcArea, mCameraData[ i ].mOffset );
 		}
 	}
+
+	mBlobTracker->update( *mTrackerChannel );
 }
 
 void MetronomeApp::draw()
@@ -301,6 +303,8 @@ void MetronomeApp::drawTracking()
 			gl::drawString( label, mapping.map( offset ) );
 		}
 	}
+
+	mndl::blobtracker::DebugDrawer::draw( mBlobTracker, getWindowBounds(), mDebugOptions );
 }
 
 void MetronomeApp::mouseMove( MouseEvent event )
