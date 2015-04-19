@@ -34,10 +34,12 @@ class MetronomeApp : public App
 
  private:
 	params::InterfaceGlRef mParams;
+	params::InterfaceGlRef mParamsTracking;
 
 	float mFps;
 
 	void setupParams();
+	void setupParamsTracking();
 	void setupSerial();
 	Serial mSerial;
 
@@ -51,6 +53,14 @@ class MetronomeApp : public App
 
 	void readConfig();
 	void writeConfig();
+
+	const int kNumCameras = 4;
+	struct CameraData
+	{
+		Area mSrcArea;
+		ivec2 mRelativeOffset;
+	};
+	ivec2 mTrackingResolution;
 };
 
 void MetronomeApp::setup()
@@ -60,6 +70,7 @@ void MetronomeApp::setup()
 	gd.gridSize = 18;
 
 	setupParams();
+	setupParamsTracking();
 
 	mOniCameraManager = OniCameraManager::create();
 
@@ -93,6 +104,13 @@ void MetronomeApp::setupParams()
 
 	GlobalData &gd = GlobalData::get();
 	gd.mConfig->addVar( "Sound/Enable", &mSoundEnabled, false );
+}
+
+void MetronomeApp::setupParamsTracking()
+{
+	GlobalData &gd = GlobalData::get();
+	mParamsTracking = params::InterfaceGl::create( "Tracking", ivec2( 200, 300 ) );
+	mParamsTracking->setPosition( ivec2( 548, 16 ) );
 }
 
 void MetronomeApp::setupSerial()
