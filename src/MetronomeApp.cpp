@@ -6,6 +6,7 @@
 #include "cinder/app/RendererGl.h"
 #include "cinder/audio/Context.h"
 #include "cinder/gl/gl.h"
+#include "cinder/ip/Fill.h"
 #include "cinder/params/Params.h"
 #include "cinder/qtime/QuickTime.h"
 
@@ -72,8 +73,12 @@ class MetronomeApp : public App
 	mndl::blobtracker::BlobTracker::Options mBlobTrackerOptions;
 	mndl::blobtracker::BlobTrackerRef mBlobTracker;
 	mndl::blobtracker::DebugDrawer::Options mDebugOptions;
+	ChannelRef mTrackerChannel;
 
 	qtime::MovieSurfaceRef mMovie;
+
+	void updateTracking();
+	void drawTracking();
 };
 
 // static
@@ -135,8 +140,10 @@ void MetronomeApp::setupParamsTracking()
 
 	mParamsTracking->addText( "Arrangement" );
 	const std::string resolutionGroup = "Resolution";
-	mParamsTracking->addParam( "Resolution X", &mTrackingResolution.x ).min( 320 ).group( resolutionGroup );
-	mParamsTracking->addParam( "Resolution Y", &mTrackingResolution.y ).min( 240 ).group( resolutionGroup );
+	mParamsTracking->addParam( "Resolution X", &mTrackingResolution.x ).min( 320 ).group( resolutionGroup ).
+		updateFn( [ this ]() { mTrackerChannel.reset(); } );
+	mParamsTracking->addParam( "Resolution Y", &mTrackingResolution.y ).min( 240 ).group( resolutionGroup ).
+		updateFn( [ this ]() { mTrackerChannel.reset(); } );
 	mParamsTracking->setOptions( resolutionGroup, " opened=false " );
 	gd.mConfig->addVar( "Tracking.Resolution", &mTrackingResolution, ivec2( 640, 480 ) );
 
@@ -227,6 +234,8 @@ void MetronomeApp::update()
 
 	mOniCameraManager->update();
 
+	updateTracking();
+
     // blob positions with grid coordinates
 	vector<ivec2> blobCenters;
 	blobCenters.push_back(ivec2( 0, 0 ));
@@ -234,6 +243,27 @@ void MetronomeApp::update()
 
 	mChannelView.update( blobCenters );
     mSound.update( mousePos.x * 4 );
+}
+
+void MetronomeApp::updateTracking()
+{
+	if ( ! mTrackerChannel )
+	{
+		mTrackerChannel = Channel::create( mTrackingResolution.x, mTrackingResolution.y );
+	}
+
+	ip::fill( mTrackerChannel.get(), (uint8_t)0 );
+
+	size_t numCameras = math< size_t >::min( kNumCameras, mOniCameraManager->getNumCameras() );
+	for ( size_t i = 0; i < numCameras; i++ )
+	{
+		ChannelRef camChannel = mOniCameraManager->getCameraChannel( i );
+		if ( camChannel )
+		{
+			Area srcArea = mCameraData[ i ].mSrcArea.getClipBy( camChannel->getBounds() );
+			mTrackerChannel->copyFrom( *camChannel, srcArea, mCameraData[ i ].mOffset );
+		}
+	}
 }
 
 void MetronomeApp::draw()
@@ -245,9 +275,16 @@ void MetronomeApp::draw()
 
 	mChannelView.draw();
 
-	mOniCameraManager->draw();
+	drawTracking();
+	//mOniCameraManager->draw();
 
 	mParams->draw();
+}
+
+void MetronomeApp::drawTracking()
+{
+	Rectf outputRect = Rectf( mTrackerChannel->getBounds() ).getCenteredFit( getWindowBounds(), true );
+	gl::draw( gl::Texture2d::create( *mTrackerChannel ), outputRect );
 }
 
 void MetronomeApp::mouseMove( MouseEvent event )

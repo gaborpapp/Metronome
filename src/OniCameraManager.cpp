@@ -82,9 +82,9 @@ size_t OniCameraManager::getNumCameras()
 	return mOniCameras.size() - 1;
 }
 
-Surface16uRef OniCameraManager::getCameraSurface( size_t i )
+ChannelRef OniCameraManager::getCameraChannel( size_t i )
 {
-	return mOniCameras[ i + 1 ].mDepthSurface;
+	return mOniCameras[ i + 1 ].mDepthChannel;
 }
 
 std::string OniCameraManager::getCameraLabel( size_t i )
@@ -154,7 +154,7 @@ void OniCameraManager::update()
 	{
 		if ( cam.mCapture && cam.mCapture->checkNewDepthFrame() )
 		{
-			cam.mDepthSurface = Surface16u::create( cam.mCapture->getDepthImage() );
+			cam.mDepthChannel = Channel::create( cam.mCapture->getDepthImage() );
 		}
 	}
 }
@@ -167,16 +167,16 @@ void OniCameraManager::draw()
 
 	for ( auto &cam : mOniCameras )
 	{
-		if ( cam.mDepthSurface )
+		if ( cam.mDepthChannel )
 		{
-			Rectf rect = cam.mDepthSurface->getBounds();
+			Rectf rect = cam.mDepthChannel->getBounds();
 			if ( rect.getX2() + offset.x > app::getWindowWidth() )
 			{
 				offset = vec2( margin, offsetY + margin + rect.getY2() );
 			}
 
 			rect.offset( offset );
-			gl::draw( gl::Texture2d::create( *cam.mDepthSurface ), rect );
+			gl::draw( gl::Texture2d::create( *cam.mDepthChannel ), rect );
 			gl::drawString( cam.mLabel, offset + vec2( margin ) );
 
 			offset.x += rect.getWidth() + margin;

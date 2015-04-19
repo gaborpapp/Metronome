@@ -21,7 +21,7 @@ class OniCameraManager
 	void draw();
 
 	size_t getNumCameras();
-	ci::Surface16uRef getCameraSurface( size_t i );
+	ci::ChannelRef getCameraChannel( size_t i );
 	std::string getCameraLabel( size_t i );
 
  protected:
@@ -55,7 +55,7 @@ class OniCameraManager
 		mndl::oni::OniCaptureRef mCapture;
 		std::shared_ptr< std::thread > mOpenThread;
 
-		ci::Surface16uRef mDepthSurface;
+		ci::ChannelRef mDepthChannel;
 	};
 
 	std::vector< OniCamera > mOniCameras;
