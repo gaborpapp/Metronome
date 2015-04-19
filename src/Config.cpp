@@ -31,18 +31,15 @@ ci::JsonTree & Config::addParent( const std::string &relativePath, ci::JsonTree 
 	for ( int i = 0; i < tokens.size() - 1; i++ )
 	{
 		const std::string &token = tokens[ i ];
-		if ( ! json.hasChild( parentId + token ) )
+		if ( ( i == 0 ) && ( ! json.hasChild( token ) ) )
 		{
-			if ( parentId == "" )
-			{
-				json.pushBack( ci::JsonTree::makeArray( token ) );
-			}
-			else
-			{
-				json.getChild( parentId ).addChild( ci::JsonTree::makeArray( token ) );
-			}
+			json.pushBack( ci::JsonTree::makeArray( token ) );
 		}
-		parentId += token + ( ( i < tokens.size() - 2 ) ? "." : "" );
+		else if ( ( i > 0 ) && ( ! json.hasChild( parentId + "." + token ) ) )
+		{
+			json.getChild( parentId ).addChild( ci::JsonTree::makeArray( token ) );
+		}
+		parentId += ( ( i == 0 ) ? "" : "." ) + token;
 	}
 	childKey = tokens.back();
 	return ( parentId == "" ) ? json : json.getChild( parentId );
