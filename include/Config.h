@@ -80,8 +80,9 @@ class Config
 	{
 		try
 		{
-			var->x = json.getChild( name + ".x" ).getValue< T >();
-			var->y = json.getChild( name + ".y" ).getValue< T >();
+			const ci::JsonTree &vec = json.getChild( name );
+			var->x = vec.getValueAtIndex< T >( 0 );
+			var->y = vec.getValueAtIndex< T >( 1 );
 		}
 		catch ( const ci::JsonTree::Exception & )
 		{
@@ -95,9 +96,9 @@ class Config
 	{
 		std::string key;
 		ci::JsonTree &parent = addParent( name, json, key );
-		ci::JsonTree vec = ci::JsonTree::makeObject( key );
-		vec.pushBack( ci::JsonTree( "x", var->x ) );
-		vec.pushBack( ci::JsonTree( "y", var->y ) );
+		ci::JsonTree vec = ci::JsonTree::makeArray( key );
+		vec.pushBack( ci::JsonTree( "", var->x ) );
+		vec.pushBack( ci::JsonTree( "", var->y ) );
 		parent.pushBack( vec );
 	}
 
@@ -107,9 +108,10 @@ class Config
 	{
 		try
 		{
-			var->x = json.getChild( name + ".x" ).getValue< T >();
-			var->y = json.getChild( name + ".y" ).getValue< T >();
-			var->z = json.getChild( name + ".z" ).getValue< T >();
+			const ci::JsonTree &vec = json.getChild( name );
+			var->x = vec.getValueAtIndex< T >( 0 );
+			var->y = vec.getValueAtIndex< T >( 1 );
+			var->z = vec.getValueAtIndex< T >( 2 );
 		}
 		catch ( const ci::JsonTree::Exception & )
 		{
@@ -123,10 +125,10 @@ class Config
 	{
 		std::string key;
 		ci::JsonTree &parent = addParent( name, json, key );
-		ci::JsonTree vec = ci::JsonTree::makeObject( key );
-		vec.pushBack( ci::JsonTree( "x", var->x ) );
-		vec.pushBack( ci::JsonTree( "y", var->y ) );
-		vec.pushBack( ci::JsonTree( "z", var->z ) );
+		ci::JsonTree vec = ci::JsonTree::makeArray( key );
+		vec.pushBack( ci::JsonTree( "", var->x ) );
+		vec.pushBack( ci::JsonTree( "", var->y ) );
+		vec.pushBack( ci::JsonTree( "", var->z ) );
 		parent.pushBack( vec );
 	}
 
