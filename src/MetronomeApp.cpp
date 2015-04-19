@@ -4,16 +4,19 @@
 #include "cinder/Serial.h"
 #include "cinder/app/App.h"
 #include "cinder/app/RendererGl.h"
+#include "cinder/audio/Context.h"
 #include "cinder/gl/gl.h"
 #include "cinder/params/Params.h"
+#include "cinder/qtime/QuickTime.h"
 
+#include "mndl/blobtracker/BlobTracker.h"
+#include "mndl/blobtracker/DebugDrawer.h"
+
+#include "ChannelView.h"
 #include "Config.h"
 #include "GlobalData.h"
 #include "OniCameraManager.h"
-#include "ChannelView.h"
 #include "ParamsUtils.h"
-
-#include "cinder/audio/Context.h"
 #include "Sound.h"
 
 using namespace ci;
@@ -23,6 +26,8 @@ using namespace std;
 class MetronomeApp : public App
 {
  public:
+	static void prepareSettings( Settings *settings );
+
 	void setup() override;
 	void draw() override;
 	void update() override;
@@ -63,13 +68,27 @@ class MetronomeApp : public App
 	};
 	ivec2 mTrackingResolution;
 	CameraData mCameraData[ kNumCameras ];
+
+	mndl::blobtracker::BlobTracker::Options mBlobTrackerOptions;
+	mndl::blobtracker::BlobTrackerRef mBlobTracker;
+	mndl::blobtracker::DebugDrawer::Options mDebugOptions;
+
+	qtime::MovieSurfaceRef mMovie;
 };
+
+// static
+void MetronomeApp::prepareSettings( Settings *settings )
+{
+	settings->setWindowSize( 1280, 800 );
+}
 
 void MetronomeApp::setup()
 {
 	GlobalData &gd = GlobalData::get();
 	gd.mConfig = mndl::Config::create();
 	gd.gridSize = 18;
+
+	mBlobTracker = mndl::blobtracker::BlobTracker::create( mBlobTrackerOptions );
 
 	setupParams();
 	setupParamsTracking();
@@ -119,6 +138,7 @@ void MetronomeApp::setupParamsTracking()
 	mParamsTracking->addParam( "Resolution X", &mTrackingResolution.x ).min( 320 ).group( resolutionGroup );
 	mParamsTracking->addParam( "Resolution Y", &mTrackingResolution.y ).min( 240 ).group( resolutionGroup );
 	mParamsTracking->setOptions( resolutionGroup, " opened=false " );
+	gd.mConfig->addVar( "Tracking.Resolution", &mTrackingResolution, ivec2( 640, 480 ) );
 
 	for ( size_t i = 0; i < kNumCameras; i++ )
 	{
@@ -144,8 +164,52 @@ void MetronomeApp::setupParamsTracking()
 		gd.mConfig->addVar( srcOffsetCfg, &mCameraData[ i ].mOffset,
 				ivec2( ( i & 1 ) * 320, ( i / 2 ) * 240 ) );
 	}
+	mParamsTracking->addSeparator();
 
-	gd.mConfig->addVar( "Tracking.Resolution", &mTrackingResolution, ivec2( 640, 480 ) );
+	mParamsTracking->addText( "Blob tracker" );
+	mParamsTracking->addParam( "Flip", &mBlobTrackerOptions.mFlip );
+	mParamsTracking->addParam( "Threshold", &mBlobTrackerOptions.mThreshold ).min( 0 ).max( 255 );
+	mParamsTracking->addParam( "Threshold inverts", &mBlobTrackerOptions.mThresholdInvertEnabled );
+	mParamsTracking->addParam( "Blur size", &mBlobTrackerOptions.mBlurSize ).min( 1 ).max( 15 );
+	mParamsTracking->addParam( "Min area", &mBlobTrackerOptions.mMinArea ).min( 0.f ).max( 1.f ).step( 0.0001f );
+	mParamsTracking->addParam( "Max area", &mBlobTrackerOptions.mMaxArea ).min( 0.f ).max( 1.f ).step( 0.001f );
+	mParamsTracking->addParam( "Bounds", &mBlobTrackerOptions.mBoundsEnabled );
+	mParamsTracking->addParam( "Top left x", &mBlobTrackerOptions.mNormalizedRegionOfInterest.x1 )
+		.min( 0.f ).max( 1.f ).step( 0.001f ).group( "Region of Interest" );
+	mParamsTracking->addParam( "Top left y", &mBlobTrackerOptions.mNormalizedRegionOfInterest.y1 )
+		.min( 0.f ).max( 1.f ).step( 0.001f ).group( "Region of Interest" );
+	mParamsTracking->addParam( "Bottom right x", &mBlobTrackerOptions.mNormalizedRegionOfInterest.x2 )
+		.min( 0.f ).max( 1.f ).step( 0.001f ).group( "Region of Interest" );
+	mParamsTracking->addParam( "Bottom right y", &mBlobTrackerOptions.mNormalizedRegionOfInterest.y2 )
+		.min( 0.f ).max( 1.f ).step( 0.001f ).group( "Region of Interest" );
+	mParamsTracking->addParam( "Blank outside Roi", &mBlobTrackerOptions.mBlankOutsideRoi )
+		.group( "Region of Interest" );
+	mParamsTracking->setOptions( "Region of Interest", "opened=false" );
+	mParamsTracking->addSeparator();
+
+	gd.mConfig->addVar( "Tracking.Flip", &mBlobTrackerOptions.mFlip, false );
+	gd.mConfig->addVar( "Tracking.Threshold", &mBlobTrackerOptions.mThreshold, 150 );
+	gd.mConfig->addVar( "Tracking.ThresholdInverts", &mBlobTrackerOptions.mThresholdInvertEnabled, false );
+	gd.mConfig->addVar( "Tracking.BlurSize", &mBlobTrackerOptions.mBlurSize, 10 );
+	gd.mConfig->addVar( "Tracking.MinArea", &mBlobTrackerOptions.mMinArea, 0.01f );
+	gd.mConfig->addVar( "Tracking.MaxArea", &mBlobTrackerOptions.mMaxArea, 0.45f );
+	gd.mConfig->addVar( "Tracking.ROI.x1", &mBlobTrackerOptions.mNormalizedRegionOfInterest.x1, 0.0f );
+	gd.mConfig->addVar( "Tracking.ROI.y1", &mBlobTrackerOptions.mNormalizedRegionOfInterest.y1, 0.0f );
+	gd.mConfig->addVar( "Tracking.ROI.x2", &mBlobTrackerOptions.mNormalizedRegionOfInterest.x2, 1.0f );
+	gd.mConfig->addVar( "Tracking.ROI.y2", &mBlobTrackerOptions.mNormalizedRegionOfInterest.y2, 1.0f );
+	gd.mConfig->addVar( "Tracking.ROI.BlankOutside", &mBlobTrackerOptions.mBlankOutsideRoi, false );
+
+	mParamsTracking->addText( "Debug" );
+
+	std::vector< std::string > debugModeNames = { "none", "blended", "overwrite" };
+	mDebugOptions.mDebugMode = mndl::blobtracker::DebugDrawer::Options::DebugMode::BLENDED;
+	mParamsTracking->addParam( "Debug mode", debugModeNames, reinterpret_cast< int * >( &mDebugOptions.mDebugMode ) );
+
+	std::vector< std::string > drawModeNames = { "original", "blurred", "thresholded" };
+	mDebugOptions.mDrawMode = mndl::blobtracker::DebugDrawer::Options::DrawMode::ORIGINAL;
+	mParamsTracking->addParam( "Draw mode", drawModeNames, reinterpret_cast< int * >( &mDebugOptions.mDrawMode ) );
+	mDebugOptions.mDrawProportionalFit = true;
+	mParamsTracking->addSeparator();
 }
 
 void MetronomeApp::setupSerial()
@@ -279,4 +343,4 @@ void MetronomeApp::writeConfig()
 	gd.mConfig->write( writeFile( configPath ) );
 }
 
-CINDER_APP( MetronomeApp, RendererGl )
+CINDER_APP( MetronomeApp, RendererGl, MetronomeApp::prepareSettings )
