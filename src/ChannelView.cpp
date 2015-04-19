@@ -22,7 +22,7 @@ void ChannelView::setup() {
     mParams->setPosition(ivec2(16,332));
     for( size_t i = 0; i < mBpmValues.size(); i++) {
         mParams->addParam( "Bpm #" + to_string(i), &mBpmValues[i]).min( 5 ).max( 220 );
-        gd.mConfig->addVar( "ChannelView/Bpm" + to_string(i), &mBpmValues[i], 60 );
+        gd.mConfig->addVar( "ChannelView.Bpm" + to_string(i), &mBpmValues[i], 60 );
     }
 }
 

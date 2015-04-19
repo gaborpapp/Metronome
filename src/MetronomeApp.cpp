@@ -103,7 +103,7 @@ void MetronomeApp::setupParams()
 			} );
 
 	GlobalData &gd = GlobalData::get();
-	gd.mConfig->addVar( "Sound/Enable", &mSoundEnabled, false );
+	gd.mConfig->addVar( "Sound.Enable", &mSoundEnabled, false );
 }
 
 void MetronomeApp::setupParamsTracking()
