@@ -56,6 +56,11 @@ class MetronomeApp : public App
 
 	Sound mSound;
 	bool mSoundEnabled;
+    
+    Font				mFont;
+    gl::TextureFontRef	mTextureFont;
+    
+    void displayCells( string result );
 
 	OniCameraManagerRef mOniCameraManager;
 
@@ -110,6 +115,9 @@ void MetronomeApp::setup()
 	setupSerial();
 
 	mChannelView.setup();
+    
+    mFont = Font( "Arial", 12 );
+    mTextureFont = gl::TextureFont::create( mFont );
 
 	auto ctx = audio::master();
 	mSound.setup(*ctx);
@@ -269,8 +277,7 @@ void MetronomeApp::update()
 
     // blob positions with grid coordinates
 	vector<ivec2> blobCenters;
-	blobCenters.push_back(ivec2( 0, 0 ));
-	//blobCenters.push_back(ivec2( 9, 0 ));
+    blobCenters.push_back( mControlPos );
 
 	mChannelView.update( blobCenters );
     mSound.update( mousePos.x * 4 );
@@ -320,6 +327,8 @@ void MetronomeApp::draw()
 	drawTracking();
 
 	mOniCameraManager->draw();
+    
+    displayCells( mChannelView.getResult() );
 
 	mParams->draw();
 }
@@ -357,8 +366,15 @@ void MetronomeApp::loadMovie( const fs::path &moviePath )
 void MetronomeApp::mouseMove( MouseEvent event )
 {
     mousePos = event.getPos();
-	//  const vec2 scale( 10 );
-	//  mControlPos = vec2( event.getPos() ) / vec2( getWindowSize() ) * scale;
+    GlobalData &gd = GlobalData::get();
+	const vec2 scale( gd.gridSize );
+	mControlPos = vec2( event.getPos() ) / vec2( getWindowSize() ) * scale;
+}
+
+void MetronomeApp::displayCells( string result )
+{
+    gl::color( Color::white() );
+    mTextureFont->drawString( result, ivec2( getWindowWidth() / 2, getWindowHeight() / 2 ) );
 }
 
 void MetronomeApp::keyDown( KeyEvent event )
@@ -398,11 +414,6 @@ void MetronomeApp::keyDown( KeyEvent event )
 					hideCursor();
 				}
 			}
-			break;
-
-		case KeyEvent::KEY_SPACE:
-			cout << mChannelView.getResult() << endl;
-			//  cout << channelView.getRoundedChannelPixels() << endl;
 			break;
 
 		case KeyEvent::KEY_ESCAPE:
