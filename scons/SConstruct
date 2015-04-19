@@ -10,5 +10,7 @@ env['RESOURCES'] = ['baseImage.png', 'customImage.png', 'customImageAlpha.png',
 env['DEBUG'] = 0
 
 env = SConscript('../blocks/Cinder-NI/scons/SConscript', exports = 'env')
+env = SConscript('../blocks/Cinder-BlobTracker/scons/SConscript', exports = 'env')
+env = SConscript('../blocks/Cinder-OpenCV/scons/SConscript', exports = 'env')
 
 SConscript(CINDER_PATH + '/scons/SConscript', exports = 'env')
