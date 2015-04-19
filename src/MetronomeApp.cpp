@@ -14,6 +14,7 @@
 #include "mndl/blobtracker/BlobTracker.h"
 #include "mndl/blobtracker/DebugDrawer.h"
 
+#include "CellDetector.h"
 #include "ChannelView.h"
 #include "Config.h"
 #include "GlobalData.h"
@@ -92,6 +93,8 @@ class MetronomeApp : public App
 
 	void updateTracking();
 	void drawTracking();
+
+	CellDetectorRef mCellDetector;
 };
 
 // static
@@ -106,6 +109,8 @@ void MetronomeApp::setup()
 	gd.mConfig = mndl::Config::create();
 
 	mBlobTracker = mndl::blobtracker::BlobTracker::create( mBlobTrackerOptions );
+
+	mCellDetector = CellDetector::create();
 
 	setupParams();
 	setupParamsTracking();

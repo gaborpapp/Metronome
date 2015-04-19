@@ -14,6 +14,7 @@
 		00B784B40FF439BC000DE1D7 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784B00FF439BC000DE1D7 /* AudioToolbox.framework */; };
 		00B784B50FF439BC000DE1D7 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784B10FF439BC000DE1D7 /* AudioUnit.framework */; };
 		00B784B60FF439BC000DE1D7 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784B20FF439BC000DE1D7 /* CoreAudio.framework */; };
+		1433E54C1AE42CC6008BB67B /* CellDetector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1433E54B1AE42CC6008BB67B /* CellDetector.cpp */; };
 		1447D3A01AE3B88B001B0130 /* libopencv_calib3d.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1447D21A1AE3B88A001B0130 /* libopencv_calib3d.a */; };
 		1447D3A11AE3B88B001B0130 /* libopencv_contrib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1447D21B1AE3B88A001B0130 /* libopencv_contrib.a */; };
 		1447D3A21AE3B88B001B0130 /* libopencv_core.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1447D21C1AE3B88A001B0130 /* libopencv_core.a */; };
@@ -91,6 +92,8 @@
 		00B784B10FF439BC000DE1D7 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
 		00B784B20FF439BC000DE1D7 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		1433E54A1AE42CB8008BB67B /* CellDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CellDetector.h; path = ../include/CellDetector.h; sourceTree = "<group>"; };
+		1433E54B1AE42CC6008BB67B /* CellDetector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CellDetector.cpp; path = ../src/CellDetector.cpp; sourceTree = "<group>"; };
 		1447D21A1AE3B88A001B0130 /* libopencv_calib3d.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libopencv_calib3d.a; sourceTree = "<group>"; };
 		1447D21B1AE3B88A001B0130 /* libopencv_contrib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libopencv_contrib.a; sourceTree = "<group>"; };
 		1447D21C1AE3B88A001B0130 /* libopencv_core.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libopencv_core.a; sourceTree = "<group>"; };
@@ -239,6 +242,7 @@
 		080E96DDFE201D6D7F000001 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				1433E54B1AE42CC6008BB67B /* CellDetector.cpp */,
 				7857D2171AD584520076FA6B /* ChannelView.cpp */,
 				1449C9EB1AD2D77200DB48B5 /* ParamsUtils.cpp */,
 				1449C9EC1AD2D77200DB48B5 /* Config.cpp */,
@@ -528,6 +532,7 @@
 		29B97315FDCFA39411CA2CEA /* Headers */ = {
 			isa = PBXGroup;
 			children = (
+				1433E54A1AE42CB8008BB67B /* CellDetector.h */,
 				784BBB1A1AE14C4D000BC945 /* Sound.h */,
 				7857D2191AD584640076FA6B /* ChannelView.h */,
 				1449C9E81AD2D75600DB48B5 /* GlobalData.h */,
@@ -637,6 +642,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7857D2181AD584520076FA6B /* ChannelView.cpp in Sources */,
+				1433E54C1AE42CC6008BB67B /* CellDetector.cpp in Sources */,
 				1447D4BF1AE3C744001B0130 /* DebugDrawer.cpp in Sources */,
 				149205BD1AD2ACAA00796FB3 /* CinderOni.cpp in Sources */,
 				1449C9ED1AD2D77200DB48B5 /* ParamsUtils.cpp in Sources */,
@@ -675,7 +681,7 @@
 					"$(inherited)",
 					"../blocks/Cinder-NI/lib/macosx",
 					"../blocks/Cinder-OpenCV/lib/macosx",
-					"../cinder/lib/macosx",
+					../cinder/lib/macosx,
 				);
 				OTHER_LDFLAGS = "\"$(CINDER_PATH)/lib/libcinder_d.a\"";
 				PRODUCT_NAME = Metronome;
@@ -710,7 +716,7 @@
 					"$(inherited)",
 					"../blocks/Cinder-NI/lib/macosx",
 					"../blocks/Cinder-OpenCV/lib/macosx",
-					"../cinder/lib/macosx",
+					../cinder/lib/macosx,
 				);
 				OTHER_LDFLAGS = "\"$(CINDER_PATH)/lib/libcinder.a\"";
 				PRODUCT_NAME = Metronome;
