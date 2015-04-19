@@ -7,6 +7,7 @@
 #include "cinder/audio/Context.h"
 #include "cinder/gl/gl.h"
 #include "cinder/ip/Fill.h"
+#include "cinder/ip/Resize.h"
 #include "cinder/params/Params.h"
 #include "cinder/qtime/QuickTime.h"
 
@@ -75,7 +76,14 @@ class MetronomeApp : public App
 	mndl::blobtracker::DebugDrawer::Options mDebugOptions;
 	ChannelRef mTrackerChannel;
 
+	enum class TrackingSourceMode : int
+	{
+		CAMERA = 0,
+		MOVIE
+	};
+	TrackingSourceMode mTrackingSourceMode = TrackingSourceMode::CAMERA;
 	qtime::MovieSurfaceRef mMovie;
+	void loadMovie( const fs::path &moviePath );
 
 	void updateTracking();
 	void drawTracking();
@@ -137,6 +145,23 @@ void MetronomeApp::setupParamsTracking()
 	GlobalData &gd = GlobalData::get();
 	mParamsTracking = params::InterfaceGl::create( "Tracking", ivec2( 200, 300 ) );
 	mParamsTracking->setPosition( ivec2( 548, 16 ) );
+
+	mParamsTracking->addText( "Source" );
+	mParamsTracking->addParam( "Input source", { "camera", "movie" },
+								reinterpret_cast< int * >( &mTrackingSourceMode ) );
+	mParamsTracking->addButton( "Load movie", [ & ]()
+			{
+				fs::path moviePath = app::getOpenFilePath();
+				if ( fs::exists( moviePath ) )
+				{
+					loadMovie( moviePath );
+				}
+				else
+				{
+					mMovie.reset();
+				}
+			} );
+	mParamsTracking->addSeparator();
 
 	mParamsTracking->addText( "Arrangement" );
 	const std::string resolutionGroup = "Resolution";
@@ -252,17 +277,26 @@ void MetronomeApp::updateTracking()
 		mTrackerChannel = Channel::create( mTrackingResolution.x, mTrackingResolution.y );
 	}
 
-	ip::fill( mTrackerChannel.get(), (uint8_t)0 );
-
-	size_t numCameras = math< size_t >::min( kNumCameras, mOniCameraManager->getNumCameras() );
-	for ( size_t i = 0; i < numCameras; i++ )
+	if ( mTrackingSourceMode == TrackingSourceMode::CAMERA )
 	{
-		ChannelRef camChannel = mOniCameraManager->getCameraChannel( i );
-		if ( camChannel )
+		ip::fill( mTrackerChannel.get(), (uint8_t)0 );
+
+		size_t numCameras = math< size_t >::min( kNumCameras, mOniCameraManager->getNumCameras() );
+		for ( size_t i = 0; i < numCameras; i++ )
 		{
-			Area srcArea = mCameraData[ i ].mSrcArea.getClipBy( camChannel->getBounds() );
-			mTrackerChannel->copyFrom( *camChannel, srcArea, mCameraData[ i ].mOffset );
+			ChannelRef camChannel = mOniCameraManager->getCameraChannel( i );
+			if ( camChannel )
+			{
+				Area srcArea = mCameraData[ i ].mSrcArea.getClipBy( camChannel->getBounds() );
+				mTrackerChannel->copyFrom( *camChannel, srcArea, mCameraData[ i ].mOffset );
+			}
 		}
+	}
+	else // movie
+	if ( mMovie && mMovie->checkNewFrame() )
+	{
+		Channel8u movieChannel( *mMovie->getSurface() );
+		ip::resize( movieChannel, movieChannel.getBounds(), mTrackerChannel.get(), mTrackerChannel->getBounds() );
 	}
 
 	mBlobTracker->update( *mTrackerChannel );
@@ -305,6 +339,13 @@ void MetronomeApp::drawTracking()
 	}
 
 	mndl::blobtracker::DebugDrawer::draw( mBlobTracker, getWindowBounds(), mDebugOptions );
+}
+
+void MetronomeApp::loadMovie( const fs::path &moviePath )
+{
+	mMovie = qtime::MovieSurface::create( moviePath );
+	mMovie->setLoop();
+	mMovie->play();
 }
 
 void MetronomeApp::mouseMove( MouseEvent event )
