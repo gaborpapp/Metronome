@@ -280,12 +280,10 @@ void MetronomeApp::update()
 
 	updateTracking();
 
-    // blob positions with grid coordinates
-	vector<ivec2> blobCenters;
-    blobCenters.push_back( mControlPos );
-
+	const auto &blobCenters = mCellDetector->getBlobCellCoords();
 	mChannelView.update( blobCenters );
-    mSound.update( mousePos.x * 4 );
+
+	mSound.update( mousePos.x * 4 );
 }
 
 void MetronomeApp::updateTracking()

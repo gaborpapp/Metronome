@@ -44,10 +44,28 @@ void CellDetector::update( const std::vector< mndl::blobtracker::BlobRef > &blob
 	{
 		calcGridCells();
 	}
+
+	mBlobCellCoords.clear();
+	for ( const auto &blob : blobs )
+	{
+		const size_t gridSize = gd.mGridSize;
+		for ( size_t y = 0; y < gridSize; y++ )
+		{
+			for ( size_t x = 0; x < gridSize; x++ )
+			{
+				if ( mGridCells[ y ][ x ].contains( blob->mPos ) )
+				{
+					mBlobCellCoords.push_back( ivec2( x, y ) );
+				}
+			}
+		}
+	}
 }
 
 void CellDetector::draw( const Rectf &bounds )
 {
+	gl::ScopedAlphaBlend blending( false );
+
 	RectMapping mapping( Rectf( vec2( 0.0f ), vec2( 1.0f ) ), bounds );
 
 	for ( const auto &gridRow : mGridCells )
@@ -57,6 +75,15 @@ void CellDetector::draw( const Rectf &bounds )
 			Rectf mappedRect = mapping.map( cellRect );
 			gl::drawStrokedRect( mappedRect );
 		}
+	}
+
+	gl::ScopedColor color( ColorA( 1.0f, 0.0f, 0.0f, 0.4f ) );
+	for ( const auto &coord : mBlobCellCoords )
+	{
+		Rectf cellRect = mGridCells[ coord.y ][ coord.x ];
+		cellRect.inflate( vec2( -0.02f ) );
+		Rectf mappedRect = mapping.map( cellRect );
+		gl::drawSolidRect( mappedRect );
 	}
 }
 

@@ -17,6 +17,9 @@ class CellDetector
 	void update( const std::vector< mndl::blobtracker::BlobRef > &blobs );
 	void draw( const ci::Rectf &bounds );
 
+	// Returns blobs cell coordinates in grid.
+	const std::vector< ci::ivec2 > & getBlobCellCoords() const { return mBlobCellCoords; }
+
  protected:
 	CellDetector();
 
@@ -29,4 +32,6 @@ class CellDetector
 	void calcGridCells();
 	std::vector< std::vector< ci::Rectf > > mGridCells;
 	size_t mLastGridSize = 0;
+
+	std::vector< ci::ivec2 > mBlobCellCoords;
 };
