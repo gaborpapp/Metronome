@@ -367,7 +367,7 @@ void MetronomeApp::mouseMove( MouseEvent event )
 {
     mousePos = event.getPos();
     GlobalData &gd = GlobalData::get();
-	const vec2 scale( gd.gridSize );
+	const vec2 scale( gd.mGridSize );
 	mControlPos = vec2( event.getPos() ) / vec2( getWindowSize() ) * scale;
 }
 
