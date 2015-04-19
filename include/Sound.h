@@ -10,23 +10,10 @@ public:
     
     Sound();
     
-    void setup(ci::audio::Context &ctx);
-    void update();
+    void setup( ci::audio::Context &ctx );
+    void update( float bpm );
     void draw();
     
-    ci::audio::GenNodeRef	mGen;	// Gen's generate audio signals
-    ci::audio::GainNodeRef	mGain;	// Gain modifies the volume of the signal
-    
-    //  ADSR
-    float attackVal;
-    float attackTime;
-    float decayVal;
-    float decayTime;
-    float sustainVal;
-    float sustainTime;
-    float releaseVal;
-    float releaseTime;
-    
-    int now, then;
-
+    ci::audio::GenNodeRef   mPhasorGen;
+    ci::audio::GainNodeRef	mGain;	
 };

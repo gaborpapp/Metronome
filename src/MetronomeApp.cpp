@@ -28,7 +28,7 @@ class MetronomeApp : public App
 	void update() override;
 
 	void keyDown( KeyEvent event ) override;
-	void mouseDrag( MouseEvent event ) override;
+	void mouseMove( MouseEvent event ) override;
 
 	void cleanup() override;
 
@@ -43,6 +43,7 @@ class MetronomeApp : public App
 	void setupSerial();
 	Serial mSerial;
 
+    ivec2 mousePos;
 	ivec2 mControlPos;
 	ChannelView mChannelView;
 
@@ -168,7 +169,7 @@ void MetronomeApp::update()
 	//blobCenters.push_back(ivec2( 9, 0 ));
 
 	mChannelView.update( blobCenters );
-    mSound.update();
+    mSound.update( mousePos.x * 4 );
 }
 
 void MetronomeApp::draw()
@@ -185,10 +186,11 @@ void MetronomeApp::draw()
 	mParams->draw();
 }
 
-void MetronomeApp::mouseDrag( MouseEvent event )
+void MetronomeApp::mouseMove( MouseEvent event )
 {
-	const vec2 scale( 10 );
-	mControlPos = vec2( event.getPos() ) / vec2( getWindowSize() ) * scale;
+    mousePos = event.getPos();
+	//  const vec2 scale( 10 );
+	//  mControlPos = vec2( event.getPos() ) / vec2( getWindowSize() ) * scale;
 }
 
 void MetronomeApp::keyDown( KeyEvent event )
