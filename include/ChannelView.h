@@ -21,12 +21,14 @@ public:
     
     ci::Rand rnd;
     
-    std::string getResult();
-    std::string getRoundedChannelPixels();
+    std::string getRawResultAsString();
+    std::string getBpmResultAsString();
+    std::vector< int > getRawResultAsVector();
+    std::vector< int > getBpmResultAsVector();
     
     ci::Channel32f baseChannel;
+    ci::Channel32f bpmChannel;
     ci::Channel customChannel;
-    ci::Surface customSurface;
     
     std::vector<ci::ivec2> controlPoints;
     std::vector<float> baseColors;
@@ -39,5 +41,5 @@ public:
     
     ci::params::InterfaceGlRef mParams;
     
-    std::vector< int > mBpmValues = { 5, 10, 20, 25 }; // TODO: fill with real values later
+    std::vector< int > mBpmValues = { 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 210, 220,  }; 
 };

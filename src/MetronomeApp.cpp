@@ -61,7 +61,8 @@ class MetronomeApp : public App
     Font				mFont;
     gl::TextureFontRef	mTextureFont;
     
-    void displayCells( string result );
+    void displayCells( std::vector< int > rawResult, std::vector< int > bpmResult );
+    void sendSerial( string s );
 
 	OniCameraManagerRef mOniCameraManager;
 
@@ -283,8 +284,13 @@ void MetronomeApp::update()
 	updateTracking();
 
 	const auto &blobCenters = mCellDetector->getBlobCellCoords();
-	mChannelView.update( blobCenters );
-
+	
+    //testing
+    //vector< ivec2 > blobCenters;
+    //blobCenters.push_back(ivec2(0,0));
+    //blobCenters.push_back(ivec2(9,0));
+    mChannelView.update( blobCenters );
+    
 	mSound.update( mousePos.x * 4 );
 }
 
@@ -340,7 +346,8 @@ void MetronomeApp::draw()
 
 	mCellDetector->draw();
 
-    displayCells( mChannelView.getResult() );
+    displayCells( mChannelView.getRawResultAsVector(), mChannelView.getBpmResultAsVector() );
+    sendSerial(mChannelView.getBpmResultAsString());
 
 	mParams->draw();
 }
@@ -383,23 +390,36 @@ void MetronomeApp::mouseMove( MouseEvent event )
 	mControlPos = vec2( event.getPos() ) / vec2( getWindowSize() ) * scale;
 }
 
-void MetronomeApp::displayCells( string result )
+void MetronomeApp::displayCells( std::vector< int > rawResult, std::vector< int > bpmResult )
 {
-    gl::color( Color::white() );
-    mTextureFont->drawString( result, ivec2( getWindowWidth() / 2, getWindowHeight() / 2 ) );
-
-	// TODO: use something like this instead to display the result
+    int c = 0;
 	const GlobalData &gd = GlobalData::get();
 	for ( int y = 0; y < gd.mGridSize; y++ )
 	{
 		for ( int x = 0; x < gd.mGridSize; x++ )
 		{
-			vec2 cellCenter = mCellDetector->getCellCenter( ivec2( x, y ) );
+            gl::color( Color::ColorT( 0.2, 0.2, 0.2 ) );
+            vec2 cellCenter = mCellDetector->getCellCenter( ivec2( x, y ) );
 			std::string label = toString( x ) + ", " + toString( y );
 			vec2 labelSize = mTextureFont->measureString( label );
 			mTextureFont->drawString( label, cellCenter - labelSize * 0.5f );
+
+            gl::color( Color::ColorT( 0.6, 0.6, 0.6 ) );
+            std::string rawValue = toString(rawResult[c]);
+            mTextureFont->drawString( "val: " + rawValue, vec2( cellCenter.x, cellCenter.y + labelSize.y * 0.5f ) );
+            
+            gl::color( Color::ColorT( 1, 0.2, 0.2 ) );
+            std::string bpmValue = toString(bpmResult[c]);
+            mTextureFont->drawString( "bpm: " + bpmValue, vec2( cellCenter.x, cellCenter.y + labelSize.y * 1.5f ) );
+
+            c++;
 		}
 	}
+}
+
+void MetronomeApp::sendSerial( string s ) {
+    //  send mapped values as string
+    //  ...
 }
 
 void MetronomeApp::keyDown( KeyEvent event )
