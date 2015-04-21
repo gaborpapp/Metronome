@@ -159,7 +159,7 @@ void MetronomeApp::setupParams()
 			} );
 
 	gd.mConfig->addVar( "Sound.Enable", &mSoundEnabled, false );
-	gd.mConfig->addVar( "GridSize", &gd.mGridSize, 10 );
+	gd.mConfig->addVar( "GridSize", &gd.mGridSize, 9 );
 }
 
 void MetronomeApp::setupParamsTracking()
@@ -289,9 +289,10 @@ void MetronomeApp::update()
     vector< ivec2 > blobCenters;
     blobCenters.push_back(ivec2(0,0));
     blobCenters.push_back(ivec2(9,0));
+    blobCenters.push_back(ivec2(0,9));
     mChannelView.update( blobCenters );
     
-	mSound.update( mousePos.x * 4 );
+	mSound.update( mChannelView.getBpmResultAsVector() );
 }
 
 void MetronomeApp::updateTracking()

@@ -9,16 +9,37 @@ using namespace std;
 Sound::Sound(){};
 
 void Sound::setup( audio::Context &ctx ) {
-    mGain = ctx.makeNode( new audio::GainNode );
-    mPhasorGen = ctx.makeNode( new audio::GenPhasorNode );
-    mPhasorGen->setFreq( 1 );
-    mPhasorGen >> mGain >> ctx.getOutput();
-    mPhasorGen->enable();
+
+    GlobalData &gd = GlobalData::get();
+    int num = gd.mGridSize * gd.mGridSize;
+    
+    for( int i = 0; i < num; i++ ) {
+        ci::audio::GenNodeRef gen;
+        ci::audio::GainNodeRef gain;
+        
+        gen = ctx.makeNode( new audio::GenPhasorNode );
+        gen->setFreq( 1 );
+        
+        gain = ctx.makeNode( new audio::GainNode );
+        
+        gen >> gain >> ctx.getOutput();
+        gen->enable();
+        
+        gain->setValue( 0.01f );
+        gain->enable();
+        
+        mPhasorGens.push_back( gen );
+        mGains.push_back( gain );
+    }
 }
 
-void Sound::update( float bpm) {
-    float hertz = 1000 / ( 60000 / bpm );
-    mPhasorGen->setFreq( hertz );
+void Sound::update( vector< int > bpmVals ) {
+    for( int i = 0; i < mPhasorGens.size(); i++ ) {
+        if( i < bpmVals.size() ) {
+            float hertz = 1000 / ( 60000 / ( float )bpmVals[i] );
+            mPhasorGens[i]->setFreq( hertz );
+        }
+    }
 }
 
 void Sound::draw() {

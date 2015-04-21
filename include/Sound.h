@@ -11,9 +11,9 @@ public:
     Sound();
     
     void setup( ci::audio::Context &ctx );
-    void update( float bpm );
+    void update( std::vector< int > bpmVals );
     void draw();
     
-    ci::audio::GenNodeRef   mPhasorGen;
-    ci::audio::GainNodeRef	mGain;	
+    std::vector< ci::audio::GenNodeRef >    mPhasorGens;
+    std::vector< ci::audio::GainNodeRef >	mGains;
 };
