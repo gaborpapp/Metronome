@@ -125,11 +125,11 @@ void MetronomeApp::setup()
     mFont = Font( "Arial", 12 );
     mTextureFont = gl::TextureFont::create( mFont );
 
-	auto ctx = audio::master();
-	mSound.setup(*ctx);
-
 	readConfig();
 	mndl::params::showAllParams( true );
+    
+    auto ctx = audio::master();
+    mSound.setup(*ctx);
 
 	if ( mSoundEnabled )
 	{
