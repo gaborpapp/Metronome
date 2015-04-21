@@ -50,6 +50,7 @@ class MetronomeApp : public App
 	void setupParamsTracking();
 	void setupSerial();
 	Serial mSerial;
+    string prevSerial;
 
     ivec2 mousePos;
 	ivec2 mControlPos;
@@ -287,12 +288,13 @@ void MetronomeApp::update()
 	
     //testing
     vector< ivec2 > blobCenters;
-    blobCenters.push_back(ivec2(0,0));
-    blobCenters.push_back(ivec2(9,0));
-    blobCenters.push_back(ivec2(0,9));
-    mChannelView.update( blobCenters );
+    blobCenters.push_back(ivec2(mousePos.x, mousePos.y));
+    //blobCenters.push_back(ivec2(9,0));
+    //blobCenters.push_back(ivec2(0,9));
     
+    mChannelView.update( blobCenters );
 	mSound.update( mChannelView.getBpmResultAsVector() );
+    sendSerial( mChannelView.getBpmResultAsString() );
 }
 
 void MetronomeApp::updateTracking()
@@ -419,8 +421,10 @@ void MetronomeApp::displayCells( std::vector< int > rawResult, std::vector< int 
 }
 
 void MetronomeApp::sendSerial( string s ) {
-    //  send mapped values as string
-    //  ...
+    if ( s.compare( prevSerial ) ) {
+        //mSerial.writeString( s );
+    }
+    prevSerial = s;
 }
 
 void MetronomeApp::keyDown( KeyEvent event )
