@@ -283,12 +283,12 @@ void MetronomeApp::update()
 
 	updateTracking();
 
-	const auto &blobCenters = mCellDetector->getBlobCellCoords();
+	//const auto &blobCenters = mCellDetector->getBlobCellCoords();
 	
     //testing
-    //vector< ivec2 > blobCenters;
-    //blobCenters.push_back(ivec2(0,0));
-    //blobCenters.push_back(ivec2(9,0));
+    vector< ivec2 > blobCenters;
+    blobCenters.push_back(ivec2(0,0));
+    blobCenters.push_back(ivec2(9,0));
     mChannelView.update( blobCenters );
     
 	mSound.update( mousePos.x * 4 );
