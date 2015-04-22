@@ -299,7 +299,10 @@ void MetronomeApp::update()
 	const auto &blobCenters = mCellDetector->getBlobCellCoords();
 	
     mChannelView.update( blobCenters );
-	mSound.update( mChannelView.getBpmResultAsVector() );
+	if ( mSoundEnabled )
+	{
+		mSound.update( mChannelView.getBpmResultAsVector() );
+	}
     sendSerial( mChannelView.getBpmResultAsString() );
 }
 
