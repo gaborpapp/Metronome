@@ -25,53 +25,64 @@ void ChannelView::setup() {
 
 void ChannelView::update( const vector<ivec2> &cps ) {
     controlPoints = cps;
-    
-    //  set base channel to black
-    Area baseArea = Area( 0, 0, baseChannel.getWidth(), baseChannel.getHeight() );
-    Channel32f::Iter iter = baseChannel.getIter( baseArea );
-    while( iter.line() ) {
-        while( iter.pixel() ) {
-            iter.v() = 0;
+    if( cps.size() > 0 ) {
+        //  set base channel to black
+        Area baseArea = Area( 0, 0, baseChannel.getWidth(), baseChannel.getHeight() );
+        Channel32f::Iter iter = baseChannel.getIter( baseArea );
+        while( iter.line() ) {
+            while( iter.pixel() ) {
+                iter.v() = 0;
+            }
         }
-    }
     
-    //  set bpm channel to black
-    Area bpmArea = Area( 0, 0, bpmChannel.getWidth(), bpmChannel.getHeight() );
-    Channel32f::Iter bpmIter = bpmChannel.getIter( bpmArea );
-    while( bpmIter.line() ) {
-        while( bpmIter.pixel() ) {
-            bpmIter.v() = 0;
+        //  set bpm channel to black
+        Area bpmArea = Area( 0, 0, bpmChannel.getWidth(), bpmChannel.getHeight() );
+        Channel32f::Iter bpmIter = bpmChannel.getIter( bpmArea );
+        while( bpmIter.line() ) {
+            while( bpmIter.pixel() ) {
+                bpmIter.v() = 0;
+            }
         }
-    }
 
-    //  add customChannel colors to baseChannel
-    for( auto tp : controlPoints ) {
-        vec2 p = vec2(baseChannel.getWidth() - tp.x, baseChannel.getHeight() - tp.y );
-        Area customArea(p.x, p.y, p.x + baseChannel.getWidth(), p.y + baseChannel.getHeight() );
+        //  add customChannel colors to baseChannel
+        for( auto tp : controlPoints ) {
+            vec2 p = vec2(baseChannel.getWidth() - tp.x, baseChannel.getHeight() - tp.y );
+            Area customArea(p.x, p.y, p.x + baseChannel.getWidth(), p.y + baseChannel.getHeight() );
+            Channel::Iter iter = customChannel.getIter( customArea );
+        
+            while( iter.line() ) {
+                while( iter.pixel() ) {
+                    ivec2 setpos(iter.x() - p.x , iter.y() - p.y ) ;
+                    baseChannel.setValue( setpos, baseChannel.getValue(setpos) + iter.v() );
+                }
+            }
+        }
+    
+        //  add corresponding bpm values to bpmChannel
+        for( auto tp : controlPoints ) {
+            vec2 p = vec2(bpmChannel.getWidth() - tp.x, bpmChannel.getHeight() - tp.y );
+            Area customArea(p.x, p.y, p.x + bpmChannel.getWidth(), p.y + bpmChannel.getHeight() );
+            Channel::Iter iter = customChannel.getIter( customArea );
+        
+            while( iter.line() ) {
+                while( iter.pixel() ) {
+                    ivec2 setpos(iter.x() - p.x , iter.y() - p.y ) ;
+                    bpmChannel.setValue( setpos, bpmChannel.getValue(setpos) + mBpmValues[iter.v()/10 - 1] );
+                }
+            }
+        }
+    } else {
+        Area customArea(0, 0, bpmChannel.getWidth(), bpmChannel.getHeight() );
         Channel::Iter iter = customChannel.getIter( customArea );
         
         while( iter.line() ) {
             while( iter.pixel() ) {
-                ivec2 setpos(iter.x() - p.x , iter.y() - p.y ) ;
-                baseChannel.setValue( setpos, baseChannel.getValue(setpos) + iter.v() );
+                ivec2 setpos(iter.x() , iter.y() ) ;
+                bpmChannel.setValue( setpos, 60 );
             }
         }
-    }
-    
-    //  add corresponding bpm values to bpmChannel
-    for( auto tp : controlPoints ) {
-        vec2 p = vec2(bpmChannel.getWidth() - tp.x, bpmChannel.getHeight() - tp.y );
-        Area customArea(p.x, p.y, p.x + bpmChannel.getWidth(), p.y + bpmChannel.getHeight() );
-        Channel::Iter iter = customChannel.getIter( customArea );
-        
-        while( iter.line() ) {
-            while( iter.pixel() ) {
-                ivec2 setpos(iter.x() - p.x , iter.y() - p.y ) ;
-                bpmChannel.setValue( setpos, bpmChannel.getValue(setpos) + mBpmValues[iter.v()/10 - 1] );
-            }
-        }
-    }
 
+    }
 }
 
 float ChannelView::remap( float val, float inMin, float inMax, float outMin, float outMax ) {
