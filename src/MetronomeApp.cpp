@@ -1,5 +1,6 @@
 #include <vector>
 
+#include "cinder/ImageIo.h"
 #include "cinder/Log.h"
 #include "cinder/Serial.h"
 #include "cinder/app/App.h"
@@ -87,10 +88,12 @@ class MetronomeApp : public App
 	enum class TrackingSourceMode : int
 	{
 		CAMERA = 0,
+		IMAGE,
 		MOVIE
 	};
 	TrackingSourceMode mTrackingSourceMode = TrackingSourceMode::CAMERA;
 	qtime::MovieSurfaceRef mMovie;
+	ChannelRef mImage;
 	void loadMovie( const fs::path &moviePath );
 
 	void updateTracking();
@@ -170,8 +173,25 @@ void MetronomeApp::setupParamsTracking()
 	mParamsTracking->setPosition( ivec2( 548, 16 ) );
 
 	mParamsTracking->addText( "Source" );
-	mParamsTracking->addParam( "Input source", { "camera", "movie" },
+	mParamsTracking->addParam( "Input source", { "camera", "image", "movie" },
 								reinterpret_cast< int * >( &mTrackingSourceMode ) );
+	mParamsTracking->addButton( "Load image", [ & ]()
+			{
+				fs::path imagePath = app::getOpenFilePath();
+				if ( fs::exists( imagePath ) )
+				{
+					try
+					{
+						mImage = Channel::create( loadImage( imagePath ) );
+					}
+					catch ( const ImageIoExceptionFailedLoad & )
+					{ }
+				}
+				else
+				{
+					mImage.reset();
+				}
+			} );
 	mParamsTracking->addButton( "Load movie", [ & ]()
 			{
 				fs::path moviePath = app::getOpenFilePath();
@@ -327,6 +347,11 @@ void MetronomeApp::updateTracking()
 				mTrackerChannel->copyFrom( *camChannel, srcArea, mCameraData[ i ].mOffset );
 			}
 		}
+	}
+	else
+	if ( mTrackingSourceMode == TrackingSourceMode::IMAGE && mImage )
+	{
+		ip::resize( *mImage, mImage->getBounds(), mTrackerChannel.get(), mTrackerChannel->getBounds() );
 	}
 	else // movie
 	if ( mMovie && mMovie->checkNewFrame() )
