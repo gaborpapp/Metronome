@@ -1,4 +1,5 @@
 #include "cinder/app/App.h"
+#include "cinder/ip/Fill.h"
 #include "GlobalData.h"
 #include "ChannelView.h"
 
@@ -26,23 +27,8 @@ void ChannelView::setup() {
 void ChannelView::update( const vector<ivec2> &cps ) {
     controlPoints = cps;
     if( cps.size() > 0 ) {
-        //  set base channel to black
-        Area baseArea = Area( 0, 0, baseChannel.getWidth(), baseChannel.getHeight() );
-        Channel32f::Iter iter = baseChannel.getIter( baseArea );
-        while( iter.line() ) {
-            while( iter.pixel() ) {
-                iter.v() = 0;
-            }
-        }
-    
-        //  set bpm channel to black
-        Area bpmArea = Area( 0, 0, bpmChannel.getWidth(), bpmChannel.getHeight() );
-        Channel32f::Iter bpmIter = bpmChannel.getIter( bpmArea );
-        while( bpmIter.line() ) {
-            while( bpmIter.pixel() ) {
-                bpmIter.v() = 0;
-            }
-        }
+		ip::fill( &baseChannel, 0.0f );
+		ip::fill( &bpmChannel, 0.0f );
 
         //  add customChannel colors to baseChannel
         for( auto tp : controlPoints ) {
@@ -72,16 +58,7 @@ void ChannelView::update( const vector<ivec2> &cps ) {
             }
         }
     } else {
-        Area customArea(0, 0, bpmChannel.getWidth(), bpmChannel.getHeight() );
-        Channel::Iter iter = customChannel.getIter( customArea );
-        
-        while( iter.line() ) {
-            while( iter.pixel() ) {
-                ivec2 setpos(iter.x() , iter.y() ) ;
-                bpmChannel.setValue( setpos, 60 );
-            }
-        }
-
+		ip::fill( &bpmChannel, 60.0f );
     }
 }
 
