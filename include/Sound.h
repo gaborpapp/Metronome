@@ -4,6 +4,7 @@
 #include "cinder/audio/Context.h"
 #include "cinder/audio/GenNode.h"
 #include "cinder/audio/GainNode.h"
+#include "cinder/audio/FilterNode.h"
 
 class Sound {
 public:
@@ -16,5 +17,6 @@ public:
     void sync();
     
     std::vector< ci::audio::GenNodeRef >    mPhasorGens;
+    std::vector< ci::audio::FilterBandPassNodeRef > mFilters;
     std::vector< ci::audio::GainNodeRef >	mGains;
 };
