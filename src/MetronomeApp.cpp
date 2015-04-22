@@ -59,10 +59,11 @@ class MetronomeApp : public App
 
 	Sound mSound;
 	bool mSoundEnabled;
-    
+	bool mDebugEnabled;
+
     Font				mFont;
     gl::TextureFontRef	mTextureFont;
-    
+
     void displayCells( std::vector< int > rawResult, std::vector< int > bpmResult );
     void sendSerial( string s );
 
@@ -161,8 +162,10 @@ void MetronomeApp::setupParams()
 			{
 				audio::master()->setEnabled( mSoundEnabled );
 			} );
+	mParams->addParam( "Debug enable", &mDebugEnabled );
 
 	gd.mConfig->addVar( "Sound.Enable", &mSoundEnabled, false );
+	gd.mConfig->addVar( "Debug.Enable", &mDebugEnabled, false );
 	gd.mConfig->addVar( "GridSize", &gd.mGridSize, 9 );
 }
 
@@ -381,7 +384,10 @@ void MetronomeApp::draw()
 
 	mCellDetector->draw();
 
-    displayCells( mChannelView.getRawResultAsVector(), mChannelView.getBpmResultAsVector() );
+	if ( mDebugEnabled )
+	{
+		displayCells( mChannelView.getRawResultAsVector(), mChannelView.getBpmResultAsVector() );
+	}
     sendSerial(mChannelView.getBpmResultAsString());
 
 	mParams->draw();
