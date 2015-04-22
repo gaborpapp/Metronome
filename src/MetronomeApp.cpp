@@ -419,7 +419,7 @@ void MetronomeApp::displayCells( std::vector< int > rawResult, std::vector< int 
             gl::color( Color::ColorT( 0.6, 0.6, 0.6 ) );
             std::string rawValue = toString(rawResult[c]);
             mTextureFont->drawString( "val: " + rawValue, vec2( cellCenter.x, cellCenter.y + labelSize.y * 0.5f ) );
-            
+
             gl::color( Color::ColorT( 1, 0.2, 0.2 ) );
             std::string bpmValue = toString(bpmResult[c]);
             mTextureFont->drawString( "bpm: " + bpmValue, vec2( cellCenter.x, cellCenter.y + labelSize.y * 1.5f ) );
@@ -427,6 +427,7 @@ void MetronomeApp::displayCells( std::vector< int > rawResult, std::vector< int 
             c++;
 		}
 	}
+	gl::color( Color::white() );
 }
 
 void MetronomeApp::sendSerial( string s ) {
