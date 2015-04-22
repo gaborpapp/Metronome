@@ -45,6 +45,12 @@ void Sound::update( vector< int > bpmVals ) {
 void Sound::draw() {
 }
 
+void Sound::sync() {
+    for( auto gen : mPhasorGens ) {
+        gen->setPhase(0);
+    }
+}
+
 
 
 

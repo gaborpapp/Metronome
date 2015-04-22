@@ -296,14 +296,8 @@ void MetronomeApp::update()
 
 	updateTracking();
 
-	//const auto &blobCenters = mCellDetector->getBlobCellCoords();
+	const auto &blobCenters = mCellDetector->getBlobCellCoords();
 	
-    //testing
-    vector< ivec2 > blobCenters;
-    blobCenters.push_back(ivec2(mousePos.x, mousePos.y));
-    //blobCenters.push_back(ivec2(9,0));
-    //blobCenters.push_back(ivec2(0,9));
-    
     mChannelView.update( blobCenters );
 	mSound.update( mChannelView.getBpmResultAsVector() );
     sendSerial( mChannelView.getBpmResultAsString() );
@@ -433,10 +427,15 @@ void MetronomeApp::displayCells( std::vector< int > rawResult, std::vector< int 
 }
 
 void MetronomeApp::sendSerial( string s ) {
-    if( mSerial ) {
-        if ( s.compare( prevSerial ) ) {
+    if ( s.compare( prevSerial ) ) {
+        if( mSoundEnabled ) {
+            //mSound.sync();
+        }
+        if( mSerial ) {
             try {
                mSerial->writeString( s );
+               //   TODO: send sync character to serial
+                
             }
             catch ( SerialExcWriteFailure ) {
                 cout << "Serial error: could not send" << endl;

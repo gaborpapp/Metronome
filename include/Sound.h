@@ -13,6 +13,7 @@ public:
     void setup( ci::audio::Context &ctx );
     void update( std::vector< int > bpmVals );
     void draw();
+    void sync();
     
     std::vector< ci::audio::GenNodeRef >    mPhasorGens;
     std::vector< ci::audio::GainNodeRef >	mGains;
