@@ -25,9 +25,6 @@ void ChannelView::setup() {
 
 void ChannelView::update( const vector<ivec2> &cps ) {
     controlPoints = cps;
-}
-
-void ChannelView::draw() {
     
     //  set base channel to black
     Area baseArea = Area( 0, 0, baseChannel.getWidth(), baseChannel.getHeight() );

@@ -49,7 +49,7 @@ class MetronomeApp : public App
 	void setupParams();
 	void setupParamsTracking();
 	void setupSerial();
-	Serial mSerial;
+    std::shared_ptr< Serial > mSerial;
     string prevSerial;
 
     ivec2 mousePos;
@@ -274,6 +274,18 @@ void MetronomeApp::setupSerial()
 	{
 		console() << "Device: " << device.getName() << endl;
 	}
+    try {
+        Serial::Device dev = Serial::findDeviceByNameContains("tty.usbmodem");
+        mSerial = std::make_shared< Serial > ( dev, 9600 );
+        
+    }
+    catch( ... ) {
+        console() << "There was an error initializing the serial device!" << std::endl;
+    }
+    
+    if( mSerial ) {
+        mSerial->flush();
+    }
 }
 
 void MetronomeApp::update()
@@ -340,9 +352,7 @@ void MetronomeApp::draw()
 	gl::setMatricesWindow( getWindowSize() );
 
 	gl::clear( Color( 0.4, 0.4, 0.4 ), true );
-
-	mChannelView.draw();
-
+    
 	drawTracking();
 
 	mOniCameraManager->draw();
@@ -421,10 +431,17 @@ void MetronomeApp::displayCells( std::vector< int > rawResult, std::vector< int 
 }
 
 void MetronomeApp::sendSerial( string s ) {
-    if ( s.compare( prevSerial ) ) {
-        //mSerial.writeString( s );
+    if( mSerial ) {
+        if ( s.compare( prevSerial ) ) {
+            try {
+               mSerial->writeString( s );
+            }
+            catch ( SerialExcWriteFailure ) {
+                cout << "Serial error: could not send" << endl;
+            }
+        }
+        prevSerial = s;
     }
-    prevSerial = s;
 }
 
 void MetronomeApp::keyDown( KeyEvent event )

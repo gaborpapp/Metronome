@@ -17,7 +17,6 @@ public:
     void setup();
 	//! Updates the blob grid coordinates in \a cps. Each blob position is sent as an integer coordinate in the grid.
 	void update(const std::vector<ci::ivec2> &cps);
-    void draw();
     
     ci::Rand rnd;
     
