@@ -405,6 +405,8 @@ void MetronomeApp::mouseMove( MouseEvent event )
 
 void MetronomeApp::displayCells( std::vector< int > rawResult, std::vector< int > bpmResult )
 {
+	gl::ScopedAlphaBlend blend( false );
+
     int c = 0;
 	const GlobalData &gd = GlobalData::get();
 	for ( int y = 0; y < gd.mGridSize; y++ )
