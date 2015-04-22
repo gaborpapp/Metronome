@@ -149,7 +149,7 @@ void MetronomeApp::setupParams()
 	mParams->addSeparator();
 
 	mParams->addText( "Metronome grid" );
-	mParams->addParam( "Grid size", &gd.mGridSize );
+	mParams->addParam( "Grid size", &gd.mGridSize, true );
 	mParams->addSeparator();
 
 	mParams->addText( "Simulation" );
