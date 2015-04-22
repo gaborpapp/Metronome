@@ -320,7 +320,7 @@ void MetronomeApp::update()
 	updateTracking();
 
 	const auto &blobCenters = mCellDetector->getBlobCellCoords();
-	
+
     mChannelView.update( blobCenters );
 	if ( mSoundEnabled )
 	{
@@ -463,14 +463,16 @@ void MetronomeApp::displayCells( std::vector< int > rawResult, std::vector< int 
 
 void MetronomeApp::sendSerial( string s ) {
     if ( s.compare( prevSerial ) ) {
-        if( mSoundEnabled ) {
-            //mSound.sync();
+        if( mSoundEnabled && ( mBlobTracker->getNumBlobs() == 0 ) ) {
+            mSound.sync();
         }
         if( mSerial ) {
             try {
-               mSerial->writeString( s );
-               //   TODO: send sync character to serial
-                
+				mSerial->writeString( s );
+                //   TODO: send sync character to serial
+				if( mBlobTracker->getNumBlobs() == 0 ) {
+
+				}
             }
             catch ( SerialExcWriteFailure ) {
                 cout << "Serial error: could not send" << endl;
