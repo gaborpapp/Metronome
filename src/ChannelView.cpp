@@ -97,7 +97,6 @@ string ChannelView::getBpmResultAsString() {
 
 std::vector< int > ChannelView::getRawResultAsVector() {
     std::vector< int > rawResult;
-    
     Area area( 0, 0, baseChannel.getWidth(), baseChannel.getHeight() );
     Channel32f::Iter iter = baseChannel.getIter( area );
     while( iter.line() ) {

@@ -520,7 +520,11 @@ void MetronomeApp::keyDown( KeyEvent event )
 				}
 			}
 			break;
-
+            
+        case KeyEvent::KEY_SPACE:
+            cout<< mChannelView.getRawResultAsVector().size() << endl;
+            break;
+            
 		case KeyEvent::KEY_ESCAPE:
 			quit();
 			break;
