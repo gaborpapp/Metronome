@@ -32,7 +32,7 @@ void ChannelView::update( const vector<ivec2> &cps ) {
 
         //  add customChannel colors to baseChannel
         for( auto tp : controlPoints ) {
-            vec2 p = vec2(baseChannel.getWidth() - tp.x, baseChannel.getHeight() - tp.y );
+            vec2 p = vec2(baseChannel.getWidth() - tp.x - 2, baseChannel.getHeight() - tp.y - 2 );
             Area customArea(p.x, p.y, p.x + baseChannel.getWidth(), p.y + baseChannel.getHeight() );
             Channel::Iter iter = customChannel.getIter( customArea );
         
@@ -46,7 +46,7 @@ void ChannelView::update( const vector<ivec2> &cps ) {
     
         //  add corresponding bpm values to bpmChannel
         for( auto tp : controlPoints ) {
-            vec2 p = vec2(bpmChannel.getWidth() - tp.x, bpmChannel.getHeight() - tp.y );
+            vec2 p = vec2(bpmChannel.getWidth() - tp.x - 2, bpmChannel.getHeight() - tp.y - 2 );
             Area customArea(p.x, p.y, p.x + bpmChannel.getWidth(), p.y + bpmChannel.getHeight() );
             Channel::Iter iter = customChannel.getIter( customArea );
         
