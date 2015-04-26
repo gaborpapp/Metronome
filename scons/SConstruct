@@ -5,7 +5,7 @@ env = Environment()
 env['APP_TARGET'] = 'MetronomeApp'
 env['APP_SOURCES'] = ['MetronomeApp.cpp', 'CellDetector.cpp', 'ChannelView.cpp',
 		'Config.cpp', 'OniCameraManager.cpp', 'ParamsUtils.cpp', 'Sound.cpp']
-env['RESOURCES'] = ['baseImage.png', 'customImage.png', 'customImageAlpha.png',
+env['RESOURCES'] = ['baseImage10x10.png', 'customImage.png', 'customImageAlpha.png',
 		'patternImage.png', 'patternImageAlpha.png']
 env['DEBUG'] = 0
 
