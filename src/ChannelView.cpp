@@ -84,7 +84,7 @@ string ChannelView::getRawResultAsString() {
 }
 
 string ChannelView::getBpmResultAsString() {
-    string bpmValues = "";
+    string bpmValues = "_S ";
     
     Area area( 0, 0, bpmChannel.getWidth(), bpmChannel.getHeight() );
     Channel32f::Iter iter = bpmChannel.getIter( area );
@@ -94,6 +94,7 @@ string ChannelView::getBpmResultAsString() {
             bpmValues.append( to_string( bpmValue ) + " " );
         }
     }
+    bpmValues.append( "\n" );
     return bpmValues;
 }
 

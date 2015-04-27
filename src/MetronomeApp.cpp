@@ -300,7 +300,7 @@ void MetronomeApp::setupSerial()
 	}
     try {
         Serial::Device dev = Serial::findDeviceByNameContains("tty.usbmodem");
-        mSerial = std::make_shared< Serial > ( dev, 9600 );
+        mSerial = std::make_shared< Serial > ( dev, 115200 );
         
     }
     catch( ... ) {
@@ -437,8 +437,7 @@ void MetronomeApp::displayCells( )
 {
 	gl::ScopedAlphaBlend blend( false );
 
-    int c = 0;
-	const GlobalData &gd = GlobalData::get();
+    const GlobalData &gd = GlobalData::get();
 	for ( int y = 0; y < gd.mGridSize; y++ )
 	{
 		for ( int x = 0; x < gd.mGridSize; x++ )
