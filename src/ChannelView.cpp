@@ -53,7 +53,10 @@ void ChannelView::update( const vector<ivec2> &cps ) {
             while( iter.line() ) {
                 while( iter.pixel() ) {
                     ivec2 setpos(iter.x() - p.x , iter.y() - p.y ) ;
-                    bpmChannel.setValue( setpos, bpmChannel.getValue(setpos) + mBpmValues[iter.v()/10 - 1] );
+                    //  max bpm: 1640
+                    if( bpmChannel.getValue(setpos) + mBpmValues[iter.v()/10 - 1] < 1640 ) {
+                        bpmChannel.setValue( setpos, bpmChannel.getValue(setpos) + mBpmValues[iter.v()/10 - 1] );
+                    }
                 }
             }
         }
