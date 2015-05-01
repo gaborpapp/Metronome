@@ -52,6 +52,7 @@ class MetronomeApp : public App
 	void setupSerial();
     std::shared_ptr< Serial > mSerial;
     string prevSerial;
+    string serialMessage;
 
     ivec2 mousePos;
 	ivec2 mControlPos;
@@ -63,10 +64,18 @@ class MetronomeApp : public App
 
     Font				mFont;
     gl::TextureFontRef	mTextureFont;
+    
+    int frameCounter;
 
     void displayCells();
+    void displaySerial();
     void displayMetronomes( std::vector< int > rawResult, std::vector< int > bpmResult );
     void sendSerial( string s );
+    void sendSequencedSerial( vector< int > v );
+    void sendMultiStringSerial( vector < string > multiString );
+    void sendResetSerial();
+    void sendStopSerial();
+    bool inited;
 
 	OniCameraManagerRef mOniCameraManager;
 
@@ -125,6 +134,7 @@ void MetronomeApp::setup()
 	mOniCameraManager = OniCameraManager::create();
 
 	setupSerial();
+    inited = false;
 
 	mChannelView.setup();
     
@@ -299,11 +309,13 @@ void MetronomeApp::setupSerial()
 		console() << "Device: " << device.getName() << endl;
 	}
     try {
-        Serial::Device dev = Serial::findDeviceByNameContains("tty.usbmodem");
+        Serial::Device dev = Serial::findDeviceByNameContains("usbserial");
         mSerial = std::make_shared< Serial > ( dev, 115200 );
+        serialMessage = "serial device inited";
         
     }
     catch( ... ) {
+        serialMessage = "error, couldn't init serial device";
         console() << "There was an error initializing the serial device!" << std::endl;
     }
     
@@ -327,7 +339,15 @@ void MetronomeApp::update()
 	{
 		mSound.update( mChannelView.getBpmResultAsVector() );
 	}
-    sendSerial( mChannelView.getBpmResultAsString() );
+    
+    //  sending data in every 20th frame to keep syncing
+    if( inited ) {
+        if( frameCounter > 20 ) {
+            sendMultiStringSerial( mChannelView.getBpmResultAsMultiString() );
+            frameCounter = 0;
+        }
+        frameCounter++;
+    }
 }
 
 void MetronomeApp::updateTracking()
@@ -389,8 +409,8 @@ void MetronomeApp::draw()
 	{
 		displayMetronomes( mChannelView.getRawResultAsVector(), mChannelView.getBpmResultAsVector() );
         displayCells();
+        displaySerial();
 	}
-    sendSerial(mChannelView.getBpmResultAsString());
 
 	mParams->draw();
 }
@@ -452,6 +472,15 @@ void MetronomeApp::displayCells( )
 	gl::color( Color::white() );
 }
 
+void MetronomeApp::displaySerial( )
+{
+    gl::ScopedAlphaBlend blend( false );
+    gl::color( Color::ColorT( 0.8, 0.8, 0.2 ) );
+            mTextureFont->drawString( serialMessage, vec2(20, getWindowHeight() - 100) );
+    gl::color( Color::white() );
+}
+
+
 void MetronomeApp::displayMetronomes( std::vector< int > rawResult, std::vector< int > bpmResult )
 {
     gl::ScopedAlphaBlend blend( false );
@@ -485,18 +514,85 @@ void MetronomeApp::sendSerial( string s ) {
         if( mSerial ) {
             try {
 				mSerial->writeString( s );
-                //   TODO: send sync character to serial
-				if( mBlobTracker->getNumBlobs() == 0 ) {
-
-				}
+                serialMessage = s;
             }
             catch ( SerialExcWriteFailure ) {
+                serialMessage = "Serial error: could not send";
                 cout << "Serial error: could not send" << endl;
             }
         }
         prevSerial = s;
     }
 }
+
+void MetronomeApp::sendSequencedSerial( vector< int > v ) {
+    if( mSerial ) {
+        int counter = 1;
+        try {
+            for( int i = 0; i < v.size(); i+=2) {
+                string tmpString = "Set " + to_string( counter ) + " BPM " + to_string( v[ i ] ) + " " + to_string( v[ i + 1 ] ) + "\n";
+                mSerial->writeString( tmpString );
+                serialMessage = tmpString;
+                
+                if( i%2 ==0 ) {
+                    counter++;
+                }
+            }
+            mSerial->writeString( "Start\n" );
+            serialMessage = "Start\n";
+            mSerial->writeString( "Set Reset_t_all\n" );
+            serialMessage = "Set Reset_t_all\n";
+        }
+        catch ( SerialExcWriteFailure ) {
+            serialMessage = "Serial error: could not send";
+            cout << "Serial error: could not send" << endl;
+        }
+    }
+}
+
+void MetronomeApp::sendMultiStringSerial( vector< string > multiString) {
+    if( mSerial ) {
+        try {
+            for( auto s : multiString ) {
+                mSerial->writeString( s );
+                serialMessage = s;
+            }
+        }
+        catch ( SerialExcWriteFailure ) {
+            serialMessage = "Serial error: could not send";
+            cout << "Serial error: could not send" << endl;
+        }
+    }
+}
+
+void MetronomeApp::sendStopSerial() {
+    if( mSerial ) {
+        try {
+            //mSerial->writeString( "Set Stop_all\n" );
+            mSerial->writeString( "Set Stop_all\n" );
+            serialMessage = "Set Stop_all\n";
+        }
+        catch ( SerialExcWriteFailure ) {
+            serialMessage = "Serial error: could not send";
+            cout << "Serial error: could not send" << endl;
+        }
+    }
+}
+
+void MetronomeApp::sendResetSerial() {
+    if( mSerial ) {
+        try {
+            //mSerial->writeString( "Set Stop_all\n" );
+            mSerial->writeString( "Set Reset_all\n" );
+            serialMessage = "Set Reset_all\n";
+        }
+        catch ( SerialExcWriteFailure ) {
+            serialMessage = "Serial error: could not send";
+            cout << "Serial error: could not send" << endl;
+        }
+    }
+}
+
 
 void MetronomeApp::keyDown( KeyEvent event )
 {
@@ -536,9 +632,20 @@ void MetronomeApp::keyDown( KeyEvent event )
 				}
 			}
 			break;
+        case KeyEvent::KEY_1:
+            sendStopSerial();
+            break;
+        
+        case KeyEvent::KEY_2:
+            sendResetSerial();
+            break;
+            
+        case KeyEvent::KEY_3:
+            sendMultiStringSerial( mChannelView.getBpmResultAsMultiString() );
+            break;
             
         case KeyEvent::KEY_SPACE:
-            cout<< mChannelView.getRawResultAsVector().size() << endl;
+            inited = true;
             break;
             
 		case KeyEvent::KEY_ESCAPE:

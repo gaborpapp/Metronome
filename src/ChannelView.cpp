@@ -98,6 +98,28 @@ string ChannelView::getBpmResultAsString() {
     return bpmValues;
 }
 
+std::vector< string > ChannelView::getBpmResultAsMultiString() {
+    std::vector< string > multiStrings;
+    Area area( 0, 0, bpmChannel.getWidth(), bpmChannel.getHeight() );
+    Channel32f::Iter iter = bpmChannel.getIter( area );
+    
+    while( iter.line() ) {
+        string bpmValues = "_S ";
+        while( iter.pixel() ) {
+            int bpmValue = iter.v();
+            bpmValues.append( to_string( bpmValue ) + " ");
+        }
+        bpmValues.append( "\n" );
+        multiStrings.push_back( bpmValues );
+    }
+    string fillElements = "Start\n";
+    string resetClocks = "Set Reset_t_all\n";
+    multiStrings.push_back( fillElements );
+    multiStrings.push_back( resetClocks );
+    
+    return multiStrings;
+}
+
 
 std::vector< int > ChannelView::getRawResultAsVector() {
     std::vector< int > rawResult;
