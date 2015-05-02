@@ -25,6 +25,9 @@ public:
     std::vector< int > getRawResultAsVector();
     std::vector< int > getBpmResultAsVector();
     std::vector< std::string > getBpmResultAsMultiString();
+    std::vector< int > getBpmResultAsVectorEven();
+    std::vector< int > getBpmResultAsVectorOdd();
+    std::vector< std::string > getBpmResultAsFixedMultiString();
     
     ci::Channel32f baseChannel;
     ci::Channel32f bpmChannel;

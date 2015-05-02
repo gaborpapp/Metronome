@@ -19,7 +19,7 @@ void ChannelView::setup() {
     mParams = params::InterfaceGl::create("BPM", ivec2(200,400));
     mParams->setPosition(ivec2(16,332));
     for( size_t i = 0; i < mBpmValues.size(); i++) {
-        mParams->addParam( "Bpm #" + to_string(i), &mBpmValues[i]).min( 5 ).max( 220 );
+        mParams->addParam( "Bpm #" + to_string(i), &mBpmValues[i]).min( 1 ).max( 220 );
         gd.mConfig->addVar( "ChannelView.Bpm" + to_string(i), &mBpmValues[i], mBpmValues[i] );
     }
 }
@@ -103,23 +103,51 @@ std::vector< string > ChannelView::getBpmResultAsMultiString() {
     Area area( 0, 0, bpmChannel.getWidth(), bpmChannel.getHeight() );
     Channel32f::Iter iter = bpmChannel.getIter( area );
     
+    int c = 1;
     while( iter.line() ) {
-        string bpmValues = "_S ";
+        string bpmValues = "_S" + to_string( c ) + " ";
         while( iter.pixel() ) {
             int bpmValue = iter.v();
             bpmValues.append( to_string( bpmValue ) + " ");
         }
         bpmValues.append( "\n" );
         multiStrings.push_back( bpmValues );
+        c++;
     }
+    string closing = "_Adat_kuld_2\n";
     string fillElements = "Start\n";
     string resetClocks = "Set Reset_t_all\n";
+    multiStrings.push_back( closing );
     multiStrings.push_back( fillElements );
     multiStrings.push_back( resetClocks );
     
     return multiStrings;
 }
 
+std::vector< string > ChannelView::getBpmResultAsFixedMultiString() {
+    std::vector< string > multiStrings;
+    Area area( 0, 0, bpmChannel.getWidth(), bpmChannel.getHeight() );
+    Channel32f::Iter iter = bpmChannel.getIter( area );
+    
+    int c = 1;
+    while( iter.line() ) {
+        string bpmValues = "_S" + to_string( c ) + " ";
+        while( iter.pixel() ) {
+            bpmValues.append( to_string( 120 ) + " ");
+        }
+        bpmValues.append( "\n" );
+        multiStrings.push_back( bpmValues );
+        c++;
+    }
+    string closing = "_Adat_kuld_2\n";
+    string fillElements = "Start\n";
+    string resetClocks = "Set Reset_t_all\n";
+    multiStrings.push_back( closing );
+    multiStrings.push_back( fillElements );
+    multiStrings.push_back( resetClocks );
+    
+    return multiStrings;
+}
 
 std::vector< int > ChannelView::getRawResultAsVector() {
     std::vector< int > rawResult;
@@ -147,6 +175,44 @@ std::vector< int > ChannelView::getBpmResultAsVector() {
     }
     return bpmResult;
 }
+
+std::vector< int >  ChannelView::getBpmResultAsVectorEven() {
+    std::vector< int > bpmResultsEven;
+    
+    Area area( 0, 0, bpmChannel.getWidth(), bpmChannel.getHeight() );
+    Channel32f::Iter iter = bpmChannel.getIter( area );
+    int c = 0;
+    while( iter.line() ) {
+        while( iter.pixel() ) {
+            float val = iter.v();
+            if( c % 2 == 0 ) {
+               bpmResultsEven.push_back( ( int )val );
+            }
+            c++;
+        }
+    }
+    return bpmResultsEven;
+}
+
+std::vector< int >  ChannelView::getBpmResultAsVectorOdd() {
+    std::vector< int > bpmResultsOdd;
+    
+    Area area( 0, 0, bpmChannel.getWidth(), bpmChannel.getHeight() );
+    Channel32f::Iter iter = bpmChannel.getIter( area );
+    int c = 0;
+    while( iter.line() ) {
+        while( iter.pixel() ) {
+            float val = iter.v();
+            if( c % 2 == 1 ) {
+                bpmResultsOdd.push_back( ( int )val );
+            }
+            c++;
+        }
+    }
+    return bpmResultsOdd;
+}
+
+
 
 
 
