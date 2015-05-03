@@ -400,7 +400,7 @@ void MetronomeApp::update()
     
     if( canSendIndexed ) { // fill all devices with values
         if( rotateMetronomeMatrix ) { // Fablab Guys connected devices in wrong order, we have to rotate the plane, 90 degrees CCW
-            sendIndexedSerials( rotatedMetronomeIndexes[ serialIndex ], mChannelView.getBpmResultAsVectorEven(), mChannelView.getBpmResultAsVectorOdd() ); //   iterate over devices frame by frame
+            sendIndexedSerials( rotatedMetronomeIndexes[ serialIndex ] - 1, mChannelView.getBpmResultAsVectorEven(), mChannelView.getBpmResultAsVectorOdd() ); //   iterate over devices frame by frame
         }else{
             sendIndexedSerials( serialIndex,  mChannelView.getBpmResultAsVectorEven(), mChannelView.getBpmResultAsVectorOdd() ); //   iterate over devices frame by frame
         }
